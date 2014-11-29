@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* types style */
+
+.hidden-field{
+	display:none;
+}
+.edit-box{
+	width:200px;
+	height:24px;
+	border:1px solid #ccc;
+}
+.edit-box:focus{
+	border:1px solid #0073EA;
+	color: #0073EA;
+}
+.btn-edit-cate,.btn-cancle-edit{
+	width:68px;
+	height:26px;
+	padding:0 !important;
+	font-size:12px;
+}

@@ -1,0 +1,157 @@
+/*案件管理模块样式*/
+/*add.html*/
+#btn-select-cont{ 
+	margin:15px auto; 
+}
+#dialog-form iframe{
+	border: 0 none;
+    height: 490px;
+    margin-left: 15px;
+    width: 95%;
+}
+.hidden-conts{
+	display:none;
+}
+#pages,.search-result{
+	width:95%;
+	margin:0 auto;
+}
+.search-result{
+	width:95%;
+	margin:15px auto;
+	border:1px solid #CCC;
+	border-collapse:separate;
+}
+.search-result th,.search-result td{
+	padding:5px 10px;
+	text-align:left;
+	border:1px solid #FFF;
+}
+.search-result th{
+	background:url("../images/tr_back.gif") repeat-x scroll 0 0 #D6E6F2;
+}
+.search-result tr.even td{
+	background:#E5F1F4;
+}
+#btn-relat,#btn-sub-lawyer{
+	margin:7px;	
+}
+.entries-list{
+	margin:5px;
+}
+.entries-list li{
+	color:#0073EA;
+	list-style:decimal inside;
+}
+.entries-list li a{
+	padding:2px 5px;
+	margin:0 10px;
+	color:#0073EA;
+}
+.entries-list li a:hover{
+	background:#0073EA;
+	color:#FFF;
+}
+
+/*detail.html*/
+.case-detail{
+	margin:15px;
+}
+.case-detail a,.case-detail a:visited{
+	color:#0073EA;
+}
+.case-detail a:hover{
+	text-decoration:underline;
+}
+.case-detail fieldset{
+	margin-bottom:45px;
+	padding-bottom:10px;
+	border:0;
+	border-bottom:1px dotted #CCC;
+}
+.case-detail fieldset legend{
+	font-size:14px;
+	font-weight:bold;
+}
+.case-detail fieldset table,.case-detail fieldset form{
+	margin-left:30px;
+	margin-top:15px;
+}
+.case-detail fieldset table th,.case-detail fieldset table td{
+	padding:5px;
+}
+.case-detail fieldset p{
+	margin-left:120px;
+}
+.case-detail fieldset p .btn-edit{
+	margin:15px 20px 0 0;
+	height:28px;
+	font-size:14px;
+}
+.case-process,.case-process th,.case-process td{
+	border:1px solid #CDCDCD;
+}
+.case-process ul li{
+	line-height:2;
+	list-style: inside decimal;
+}
+.case-process ul li a{
+	padding-left:18px;
+}
+.case-process ul li a,.case-process ul li a:visited{
+	color:#000;
+}
+.case-process ul li a:hover{
+	color:#0073EA;
+}
+#add-case-pro-dialog textarea,#add-case-pro-dialog input,#add-case-contact-dialog input{
+	border:1px solid #CCC;
+}
+#add-case-pro-dialog p{
+	margin:15px 0;
+}
+#add-case-pro-dialog .datepicker,#cb-remind{
+	margin-left:15px;
+}
+#add-case-pro-dialog p textarea{
+	margin-left:40px;
+	margin-top:-30px;
+	width:520px;
+	height:90px;
+}
+#add-case-pro-dialog p .btn-submit{
+	margin:0 15px;
+}
+#add-case-pro-dialog p #submit-case-proc{
+	margin:15px 0 0 63px;
+}
+#add-case-pro-dialog p.file-field{
+	margin-left:60px;
+}
+.cancle-file{
+	margin-left:15px;
+}
+#add-case-contact-dialog th,#add-case-contact-dialog td{
+	padding:7px 12px;
+}
+#add-case-contact-dialog #txtAddr{
+	width:240px;
+}
+#add-case-contact-dialog table colgroup{
+	width:145px;
+}
+#remind-detail{
+	margin-left:63px;
+	border-bottom:1px dotted #CCC;
+	display:none;
+}
+#remind-detail p input{
+	margin-left:0 !important;
+}
+#remind-detail p textarea{
+	width:400px;
+	height:60px;
+	margin-left:95px;
+	margin-top:-35px;
+}
+	

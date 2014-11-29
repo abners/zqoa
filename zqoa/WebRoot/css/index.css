@@ -1,0 +1,84 @@
+@CHARSET "UTF-8";
+.forms-area{
+	margin-bottom:20px;
+}
+.forms-area h4{
+	overflow:hidden;
+	cursor:pointer;
+}
+.forms-area h4 span{
+	float:left;
+	width:240px;
+}
+.forms-area h4 a{
+	float:right;
+	display:block;
+	width:26px;
+	height:40px;
+	margin-right:3px;
+	_margin-top:-37px;
+	background:url("../images/menu-bits-vs.gif") no-repeat 0 -104px;
+}
+.forms-area h4 a:hover{
+	background:url("../images/menu-bits-vs.gif") no-repeat 0 -200px;
+}
+.forms-area div{
+	padding:15px;
+}
+#notice-ct ul li{
+	list-style:inside decimal;
+	border-bottom:1px dotted #CCC;
+	padding-bottom:5px;
+	margin-bottom:15px;
+}
+#notice-ct ul li a{
+	cursor:default;
+	font-size:14px;
+	font-weight:bold;
+}
+#notice-ct ul li a.notice-ct-toggle{
+	font-size:12px;
+	font-weight:normal;
+	margin-left:18px;
+	cursor:pointer;
+}
+#notice-ct ul li a.notice-ct-toggle:hover{
+	background:#3B5998;
+	color:#FFF;
+}
+#notice-ct ul li div{
+	text-indent:26px;
+	margin-left:24px;
+	display:none;
+	padding:15px 0;
+}
+#remind-area ul li{
+	padding-left:20px;
+	line-height:2;
+	background:url("../images/clock_red.png") no-repeat left center;
+}
+#remind-area ul li span{
+	color:red;      
+}
+#remind-area ul li a:hover{
+	background:#3B5998;
+	color:#FFF;
+}
+.work-ct{
+	padding:0px !important;
+}
+.work-ct h5{
+	margin:15px 15px 10px;
+	border-bottom:1px solid #CCC;
+}
+.work-ct h5 span{
+	position:relative;
+	top:8px;
+	padding:2px 3px 2px 0;
+	background:#FFF;
+	color:#777;
+}
+.work-ct table{
+	width:95%;
+	margin:15px 2%;
+}

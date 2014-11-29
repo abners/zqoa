@@ -1,0 +1,22 @@
+/*user MGR styles*/
+
+/* editPower.html */
+.powerMgr{
+	margin-top:20px;
+	padding:15px;
+	border:1px solid #CCC;
+}
+.powerMgr legend{
+	font-size:14px;
+	font-weight:bold;
+	color:#474747;
+	padding:3px 5px;
+	border:1px solid #CCC;
+}
+.powerMgr ul li{
+	line-height:2;
+}
+.powerMgr ul li span{
+	font-weight:bold;
+	color:red;
+}

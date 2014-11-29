@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户登录 -  </title>
+<link href="css/login.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+</head>
+<script type="text/javascript"> 
+if (top.location !== self.location) {
+    top.location=self.location;
+}
+</script> 
+<body>
+<div id="container">
+	<form id="login-form" action="/login.html" method="post">
+		<h2>用户登录</h2>
+    	<label for="account">账号：</label> 
+        <input type="text" name="account" />
+        <label for="password">密码：</label>
+        <input type="password" name="password" />
+        <p id="tips"></p>
+        <input class="btn-login" type="button" name="submit" value="登 录" />
+    </form>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(document).keydown(function(event){  
+		  if(event.keyCode==13){
+				$("input[name='submit']").click();
+			}
+		});
+		$("input[name='submit']").click(function(){
+			var account = $("input[name='account']").val();
+			var password = $("input[name='password']").val();
+			if($.trim(account) == '' || $.trim(password) == '' ){
+				$("#tips").html("用户名和密码不能为空！").slideDown();	
+				return false;
+			}
+			$.ajax({
+				type: 'post',
+				url: 'Login.htm',
+				dataType: 'json',
+				data: 'account='+account+'&password='+password,
+				success: function(data){
+					if(data.result == '1'){
+						$("#tips").html("登录成功！页面跳转中...").slideDown();	
+						setTimeout(function(){window.location.href="index.htm";},1000);	
+					}else{
+						$("#tips").html("用户名或密码错误！").slideDown();	
+						return false;
+					}	
+				}	
+			});		
+		});
+	});
+</script>
+</body>
+</html>

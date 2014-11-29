@@ -1,0 +1,27 @@
+@charset "utf-8";
+/* base style */
+body{ font:90%/1.5 Tahoma,Helvetica,Arial,"宋体",sans-serif ;}
+html,body,h2,h3,h4,h5,ul,fieldset,legend,p{padding:0;margin:0;}
+h2{font-size:18px;}
+h3{font-size:16px;}
+h4{font-size:14px;}
+h5{font-size:12px;}
+li{ list-style:none; }
+a{ text-decoration:none; }
+a,a:visited{ color:#3B5998 }
+table { border-collapse:collapse; border-spacing:0; }
+#container{ margin:0 auto; }
+.clean{ clear:both; }
+.hidden{ display:none; }
+.btn-h28{ height:28px; line-height:28px; vertical-align:middle; padding:0 12px !important; font-size:14px !important;}
+.w45{ width:45px; }
+.w60{ width:60px; }
+.w90{ width:90px; }
+.w120{ width:120px; }
+.w180{ width:120px; }
+.w240{ width:240px; }
+.w15p{ width:15%; }
+.w20p{ width:20%; }
+.w30p{ width:30%; }
+.datepicker{ background:url("../images/calendar.png") no-repeat scroll right center transparent; }
+.require{ color:red; font-weight:bold; }

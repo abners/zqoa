@@ -1,0 +1,140 @@
+﻿@charset "utf-8";
+/* Add Contract Style */
+#step1-add-cust{
+	display:none;
+}
+table.select-list{
+	width:100%;
+	margin-bottom:15px;
+}
+table.select-list th,table.select-list td{
+	padding:7px 5px;
+	border:1px solid #fff;
+}
+table.select-list th{
+	text-align:left;
+	background:#D6E6F2 url(../images/tr_back.gif) repeat-x;
+	color:#333;
+	font-weight:bold; 
+	text-shadow:0 1px 0 #FFF;
+}
+table.select-list .odd{
+	background:#E5F1F4;	
+}
+#select-cust-type{
+	margin-top:25px;
+	margin-left:37px;
+	margin-bottom:15px;
+}
+
+#select-cust-type label{
+	margin-right:15px;
+	font-size:14px;
+	font-weight:bold;
+}
+#private-cust-form,#legal-cust-form,#other-cust-form{
+	display:none;	
+}
+td span.tips{
+	width:100%;
+	padding:7px 30px;
+	background:url(../images/error.png) no-repeat 5px 9px #FFF8D9;
+	border-top:1px solid #F30;
+	border-bottom:1px solid #F30;
+	color:#F00;
+	font-weight:bold;
+}
+td span.accept{
+	display:block;
+	width:120px;
+	padding:10px 30px;
+	margin-left:10px;
+	background:url(../images/accept.png) no-repeat left center;
+}
+#dialog-form iframe{
+	width:95%;
+	height:500px;
+	margin-left:15px;
+	border:0;
+}
+/*关联合同*/
+#hidden-conts{
+	display:none;
+}
+#pages,#search-result{
+	width:95%;
+	margin:0 auto;
+}
+#search-result{
+	width:95%;
+	margin:15px auto;
+	border:1px solid #CCC;
+	border-collapse:separate;
+}
+#search-result th,#search-result td{
+	padding:5px 10px;
+	text-align:left;
+	border:1px solid #FFF;
+}
+#search-result th{
+	background:url("../images/tr_back.gif") repeat-x scroll 0 0 #D6E6F2;
+}
+#search-result tr.even td{
+	background:#E5F1F4;
+}
+#btn-relat{
+	margin:7px;	
+}
+#relative-cont-list{
+	margin:5px;
+}
+#relative-cont-list li{
+	color:#0073EA;
+	list-style:decimal inside;
+}
+#relative-cont-list li a{
+	padding:2px 5px;
+	margin:0 10px;
+	color:#0073EA;
+}
+#relative-cont-list li a:hover{
+	background:#0073EA;
+	color:#FFF;
+}
+
+table.pay-phase th,table.pay-phase td{
+	width:110px;
+	padding:5px;
+	border:1px solid #ccc;
+}
+.w60{
+	width:60px !important;
+}
+.hidden{
+	display:none;
+}
+table.pay-phase td input{
+	width:110px !important;
+}
+/*合同详情 contDetail.html*/
+table.cont-detail-list th{
+	width:100px;
+}
+
+/*合同收费登记 pay.html*/
+.dash-line{
+	width:100%;
+	height:30px;
+	border-top:1px dotted #ccc;
+}
+/*addContract.html*/
+.cont-attach-list{
+	margin:10px 0;
+}
+.cont-attach-list li{
+	line-height:2;
+}
+.cont-attach-list .cancle-file{
+	margin-left:15px;
+}
+

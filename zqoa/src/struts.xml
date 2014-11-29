@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "struts-2.0.dtd" >
+
+<struts>
+	<include file="struts-default.xml" />
+	<constant name="struts.objectFactory" value="spring" />
+	<!-- 配置允许上传的文件最大大小为30M -->
+	<constant name="struts.multipart.maxSize" value="31457290"></constant>
+	<!-- 上传文件临时文件目录 -->
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+	<constant name="struts.devMode" value="false" />
+	<package name="struts" extends="json-default">
+		<interceptors>
+
+			<!-- 先定义拦截器 -->
+			<interceptor name="myInterceptor" class="interceptor.TrimInterceptor">
+				</interceptor>
+
+				<!-- 加到自己设置的拦截器栈里边去 -->
+
+				<interceptor-stack name="myStack">
+
+					<interceptor-ref name="myInterceptor">
+
+					</interceptor-ref>
+					<interceptor-ref name="defaultStack"></interceptor-ref>
+
+				</interceptor-stack>
+		</interceptors>
+		<!-- 定义默认拦截器 -->
+		<default-interceptor-ref name="myStack" />
+		<default-action-ref name="toLogin">
+		</default-action-ref>
+		<!-- 定义全局Result -->
+		<global-results>
+			<!-- 当返回login视图名时，转入/login.html页面 -->
+			<result name="toLogin">/login.html</result>
+		</global-results>
+		<action name="Login" class="com.login.web.LoginAction">
+			<result name="success" type="json"></result>
+		</action>
+	</package>
+	<package name="cont" extends="json-default">
+		<interceptors>
+
+			<!-- 先定义拦截器 -->
+			<interceptor name="myInterceptor" class="interceptor.TrimInterceptor"></interceptor>
+				<interceptor name="loginInterceptor" class="interceptor.LoginInterceptor">
+				</interceptor>
+
+				<!-- 加到自己设置的拦截器栈里边去 -->
+
+				<interceptor-stack name="myStack">
+
+					<interceptor-ref name="myInterceptor">
+
+					</interceptor-ref>
+					<interceptor-ref name="loginInterceptor">
+
+					</interceptor-ref>
+					<interceptor-ref name="defaultStack"></interceptor-ref>
+
+				</interceptor-stack>
+		</interceptors>
+		<!-- 定义默认拦截器 栈-->
+		<default-interceptor-ref name="myStack" />
+		<default-action-ref name="toLogin">
+		</default-action-ref>
+		<!-- 定义全局Result -->
+		<global-results>
+			 <!-- 当返回login视图名时，转入/login.html页面 -->
+			<result name="toLogin">/goToLogin1.jsp</result>
+		</global-results>
+		<action name="index" class="com.executiveManage.web.ExecutiveAction" method="index">
+			<result>/jsp/index.jsp</result>
+		</action>
+		<action name="toIndex" class="com.executiveManage.web.ExecutiveAction" method="index">
+			<result>/jsp/main.jsp</result>
+		</action>
+		
+		<action name="fullTextSearch" class="com.contManage.web.FullTextSearchAction" >
+			<result name=""></result>
+		</action>
+		
+		<!-- 添加客户初始化界面 -->
+		<action name="addCustomer">
+			<result>/jsp/customer/addCustomer.jsp</result>
+		</action>
+		<!-- 新增客户 -->
+		<action name="saveCustomer" class="com.customerManage.web.CustomerManageAction"
+			method="save">
+			<result type="json"></result>
+		</action>
+		<!-- 浏览客户 -->
+		<action name="listCustomer" class="com.customerManage.web.CustomerManageAction"
+			method="listCustomer">
+			<result>/jsp/customer/listCustomers.jsp</result>
+		</action>
+		<!-- 浏览过期客户 -->
+		<action name="listExpiredCustomer" class="com.customerManage.web.CustomerManageAction" method="listExpiredCustomer">
+			<result>/jsp/customer/listExpiredCustomers.jsp</result>
+		</action>
+		<!-- 查看客户详情 -->
+		<action name="custDetail" class="com.customerManage.web.CustomerManageAction"
+			method="customerDetail">
+			<result>/jsp/customer/custDetail.jsp</result>
+		</action>
+		<!-- 修改客户信息初始化 -->
+		<action name="modifyCustInit" class="com.customerManage.web.CustomerManageAction"
+			method="customerDetail">
+			<result>/jsp/customer/modifyCustInit.jsp</result>
+		</action>
+		<!-- 保存客户信息修改结果 -->
+		<action name="modifyCust" class="com.customerManage.web.CustomerManageAction"
+			method="saveModify">
+			<result type="json"></result>
+		</action>
+		<!-- 删除客户 -->
+		<action name="deltCustomer" class="com.customerManage.web.CustomerManageAction"
+			method="deltCustomer">
+			<result type="json"></result>
+		</action>
+		<!-- 将客户 归入过期 -->
+		<action name="expiredCustomer" class="com.customerManage.web.CustomerManageAction"
+			method="expiredCustomer">
+			<result type="json"></result>
+		</action>
+		<!-- 启用客户 -->
+		<action name="enableCustomer" class="com.customerManage.web.CustomerManageAction"
+			method="enableCustomer">
+			<result type="json"></result>
+		</action>
+		<!-- 合同类型浏览 -->
+		<action name="listContractType" class="com.contManage.web.ContracterManageAction"
+			method="listContractType">
+			<result>/jsp/contracter/listContractType.jsp</result>
+		</action>
+		<!-- 添加合同类型 -->
+		<action name="addContractType" class="com.contManage.web.ContracterManageAction"
+			method="addContractType">
+			<result type="json"></result>
+		</action>
+		<!-- 修改合同类型名称 -->
+		<action name="modifyContractType" class="com.contManage.web.ContracterManageAction"
+			method="modifyContractType">
+			<result type="json"></result>
+		</action>
+		<!-- 删除合同类型 -->
+		<action name="deltContractType" class="com.contManage.web.ContracterManageAction"
+			method="deltContractType">
+			<result type="json"></result>
+		</action>
+		<!-- 添加合同初始化界面 -->
+		<action name="addContractInit" class="com.contManage.web.ContracterManageAction"
+			method="addContractInit">
+			<result>/jsp/contracter/addContract.jsp</result>
+		</action>
+		<!-- 获取协办律师 -->
+		<action name="getCo_counsel" class="com.contManage.web.ContracterManageAction"
+			method="getCo_counsel">
+			<result>/jsp/contracter/counselSelect.jsp</result>
+		</action>
+		<!-- 保存添加的合同信息 -->
+		<action name="addContract" class="com.contManage.web.ContracterManageAction"
+			method="addContract">
+			<result type="json"></result>
+		</action>
+		<!-- 查看合同 列表 -->
+		<action name="contractlist" class="com.contManage.web.ContracterManageAction"
+			method="listContract">
+			<result>/jsp/contracter/contractView.jsp</result>
+		</action>
+		<!-- 查看合同详情 -->
+		<action name="contractDetail" class="com.contManage.web.ContracterManageAction"
+			method="contractDetail">
+			<result name="success">/jsp/contracter/contractDetail.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 合同信息修改初始化 -->
+		<action name="modifyContractInit" class="com.contManage.web.ContracterManageAction"
+			method="modifyContInit">
+			<result name="success">/jsp/contracter/contractModify.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 删除合同协办律师 -->
+		<action name="deltCoscus" class="com.contManage.web.ContracterManageAction"
+			method="deltCoscus">
+			<result type="json"></result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 修改合同信息 -->
+		<action name="updateContract" class="com.contManage.web.ContracterManageAction"
+			method="updateContract">
+			<result type="json"></result>
+
+		</action>
+		<!-- 删除合同及其关联信息 -->
+		<action name="deltContract" class="com.contManage.web.ContracterManageAction"
+			method="deltContract">
+			<result type="json"></result>
+		</action>
+
+		<!-- 合同事务登记初始化 -->
+		<action name="contAffairRegInit" class="com.contManage.web.ContracterManageAction"
+			method="contAffairRegInit">
+			<result>/jsp/contracter/contAffairReg.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 根据合同类型获取合同 -->
+		<action name="getContractByTypeId" class="com.contManage.web.ContracterManageAction"
+			method="getContractByTypeId">
+			<result type="json"></result>
+		</action>
+		<!-- 添加合同事务 -->
+		<action name="addContAffair" class="com.contManage.web.ContracterManageAction"
+			method="addContAffair">
+			<result type="json"></result>
+		</action>
+		<!-- 查看合同事务初始化 -->
+		<action name="contAffairList" class="com.contManage.web.ContracterManageAction"
+			method="listContract">
+			<result>/jsp/contracter/contAffairList.jsp</result>
+		</action>
+		<!-- 获取某一合同下的所有事务 -->
+		<action name="contAffairView" class="com.contManage.web.ContracterManageAction"
+			method="contAffairView">
+			<result name="success">/jsp/contracter/contAffairDetail.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 合同归档 -->
+		<action name="arachiveCont" class="com.contManage.web.ContracterManageAction"
+			method="arachiveCont">
+			<result type="json"></result>
+		</action>
+		<!-- 查看档案 -->
+		<action name="listArchives" class="com.contManage.web.ContracterManageAction"
+			method="listArchives">
+			<result>/jsp/contracter/archive_list.jsp</result>
+		</action>
+		
+		<action name="archivedDetail" class="com.contManage.web.ContracterManageAction" method="contractDetail">
+			<result>/jsp/contracter/archive_detail.jsp</result>
+		</action>
+		<!-- 添加档案初始化 -->
+		<action name="addArchiveInit" class="com.contManage.web.ContracterManageAction" method="addArchiveInit">
+			<result>/jsp/contracter/addArchive.jsp</result>
+		</action>
+		<!-- 添加档案 -->
+		<action name="addArchive" class="com.contManage.web.ContracterManageAction" method="addArchive">
+			<result type="json"></result>
+		</action>
+		<!-- 对档案进行出档 -->
+		<action name="contArchive" class="com.contManage.web.ContracterManageAction" method="contArchive">
+			<result type="json"></result>
+		</action>
+		<!-- 添加合同附件初始化 -->
+		<action name="addContFileInit" class="com.FileManage.web.FileManage" method="addContFileInit">
+			<result>/jsp/contracter/addContFile.jsp</result>
+		</action>
+		<!-- 保存合同附件信息 -->
+		<action name="addContFile" class="com.contManage.web.ContracterManageAction" method="addContFile">
+			<result type="json"></result>
+		</action>
+		<!-- 删除合同附件 -->
+		<action name="deltContFile"  class="com.contManage.web.ContracterManageAction" method="deltContFile">
+			<result type="json"></result>
+		</action>
+		<!-- 合同收费登记 -->
+		<action name="regFeesInit" class="com.contManage.web.ContracterManageAction" method="regFeesInit">
+			<result name="success">/jsp/contracter/regFees.jsp</result>
+		</action>
+		<!-- 保存收费结果 -->
+		<action name="regFees" class="com.contManage.web.ContracterManageAction" method="regFees">
+			<result type="json"></result>
+		</action>
+		<!-- 律师承办查看：选择律师 -->
+		<action name="lawyerSelect" class="com.contManage.web.ContracterManageAction" method="lawyerSelect">
+			<result name="success">/jsp/contracter/lawyerSelect.jsp</result>
+		</action>
+		<!-- 查询律师承办信息情况 -->
+		<action name="lawyerCase_Cont_See" class="com.executiveManage.web.ExecutiveAction" method="lawyerCase_Cont_See">
+			<result name="success">/jsp/contracter/lawyerSelect.jsp</result>
+		</action>
+		<action name="exitSystem" class="com.executiveManage.web.ExecutiveAction" method="exitSystem">
+			<result>/goToLogin1.jsp</result>
+		</action>
+	</package>
+	<include file="case_struts.xml" />
+	<include file="user_struts.xml" />
+	<include file="asr_struts.xml"></include>
+	<include file="tools_struts.xml"></include>
+</struts>
+

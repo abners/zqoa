@@ -1,0 +1,53 @@
+@charset "utf-8";
+div.sdmenu {
+	width: 210px; font-size:14px; font-weight:bold; color:#ad8634;
+}
+
+#user-meta{
+	display:block;
+	height:48px;
+	margin-left:20px;
+	margin-top:10px;
+	padding-left:55px;
+	background:url("../images/userMeta.png") no-repeat left center;
+}
+div.sdmenu div {
+	background: url(../images/menu_bg_hover.jpg) repeat-x;overflow: hidden; text-align:left;
+}
+/* www.codefans.net */
+* html div.sdmenu div{
+    float:left 
+}
+div.sdmenu div.collapsed {
+	height: 32px;
+}
+div.sdmenu div span {
+	display: block;line-height:32px;width:210px;font-weight: bold;color: white;cursor: pointer; margin-left:10px;
+}
+div.sdmenu div span a{
+    padding:0; background:none; border:0; font-size:14px;line-height:32px;display:block
+}
+div.sdmenu div.collapsed {
+	background: url(../images/menu_bg.jpg) repeat-x; width:210px; color:#ad8634
+}
+div.sdmenu div.collapsed span{
+    color:#3B5998; line-height:32px; 
+}
+div.sdmenu div.collapsed span a.current{
+    color:#ad8634; 
+}
+div.sdmenu div a {
+	padding-left:47px;display: block;border-bottom: 1px solid #fff;color: #ad8634;font-size:13px; line-height:28px
+}
+div.sdmenu div a.current {
+	background : no-repeat  27px 7px #F1E1FF;  color:#ad8634
+}
+div.sdmenu div span a.current {
+	background:#FBEC88; font:color:#F63
+}
+div.sdmenu div a:hover {
+	background : no-repeat  27px 7px #FAF4FF;text-decoration: none;
+}
+div.sdmenu div span a:hover {
+	background:none;
+}

@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 指定Spring配置文件的Schema信息 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/zqoanew?characterEncoding=utf8" />
+		<property name="username" value="root" />
+		<property name="password" value="mysql_root" />
+	</bean>
+	<bean id="mySessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingLocations">
+			<value>classpath*:com/*/vo/*Model.hbm.xml</value>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean name="updateIndexJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.indexJob.UpdateLuenceSearchIndexInTime" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="timeout" value="0" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- 间隔2s执行一次 -->
+<!--	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">-->
+<!--		<property name="jobDetail" ref="updateIndexJob" />-->
+<!--		<property name="startDelay" value="0" /> 调度工厂实例化后，经过0秒开始执行调度 -->
+<!--		<property name="repeatInterval" value="2000" /> 每2秒调度一次 -->
+<!--	</bean>-->
+
+	<!-- 指定时间运行一次 -->
+	 <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> 
+	 <property name="jobDetail" ref="updateIndexJob" /> 
+<!--	 每天晚上12:00运行一次 -->
+	 <property name="cronExpression" value="0 0 23 * * ?" /> 
+	 </bean> 
+
+	<!-- 配置任务调度工厂 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+<!--				<ref bean="simpleTrigger" />-->
+
+				<ref bean="cronTrigger" />
+			</list>
+		</property>
+	</bean>
+	<bean id="loginDao" class="com.login.dao.impl.LoginDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="loginEbi" class="com.login.business.ebo.LoginEbo">
+		<property name="loginDao" ref="loginDao"></property>
+	</bean>
+	<!-- 工具管理 -->
+	<bean id="toolsManageDao" class="com.commonTools.dao.impl.ToolsManageDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="toolsManageEbi" class="com.commonTools.business.ebo.ToolsManageEbo">
+		<property name="toolsManageDao" ref="toolsManageDao"></property>
+	</bean>
+	<!-- 客户管理 -->
+	<bean id="customerManageDao" class="com.customerManage.dao.impl.CustomerManageDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="customerManageEbi" class="com.customerManage.business.ebo.CustomerManageEbo">
+		<property name="customerManageDao" ref="customerManageDao"></property>
+	</bean>
+	<!-- 合同管理 -->
+	<bean id="contracterManageDao" class="com.contManage.dao.impl.ContracterManageDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="contracterManageEbi" class="com.contManage.business.ebo.ContracterManageEbo">
+		<property name="contracterManageDao" ref="contracterManageDao"></property>
+	</bean>
+	<!-- 案件管理 -->
+	<bean id="caseManageDao" class="com.caseManage.dao.impl.CaseManageDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="caseManageEbi" class="com.caseManage.business.ebo.CaseManageEbo">
+		<property name="caseManageDao" ref="caseManageDao" />
+	</bean>
+	<!-- 文件管理 -->
+	<bean id="fileManageDao" class="com.FileManage.dao.impl.FileManageDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="fileManageEbi" class="com.FileManage.business.ebo.FileManageEbo">
+		<property name="fileManageDao" ref="fileManageDao"></property>
+	</bean>
+	<!-- 用户管理 -->
+	<bean id="userManageDao" class="com.personalManage.dao.impl.UserManageDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="userManageEbi" class="com.personalManage.business.ebo.UserManageEbo">
+		<property name="userManageDao" ref="userManageDao"></property>
+	</bean>
+	<!-- 事务管理（包括首页数据的加载 ） -->
+	<bean id="executiveDao" class="com.executiveManage.dao.impl.ExecutiveDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+	<bean id="executiveEbi" class="com.executiveManage.business.ebo.ExecutiveEbo">
+		<property name="executiveDao" ref="executiveDao"></property>
+	</bean>
+</beans>
+	
+	
