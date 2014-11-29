@@ -1,11 +1,3 @@
 /com
-/extremetable.properties
-/struts.properties
-/struts.xml
-/system.properties
-/tools_struts.xml
-/user_struts.xml
-/asr_struts.xml
-/case_struts.xml
 /filter
 /interceptor
