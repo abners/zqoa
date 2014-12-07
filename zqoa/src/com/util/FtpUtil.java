@@ -79,7 +79,7 @@ public class FtpUtil {
 
 			} else {
 
-				address = new InetSocketAddress(this.ip, 20);
+				address = new InetSocketAddress(this.ip, 21);
 
 			}
 			ftpClient.connect(address);
@@ -171,11 +171,11 @@ public class FtpUtil {
 
 		try {
 
-			pwd = ftpClient.pwd();
+			pwd = ftpClient.getWorkingDirectory();
 
-			ftpClient.cd(dir);
+			ftpClient.changeDirectory(dir);
 
-			ftpClient.cd(pwd);
+			ftpClient.changeDirectory(pwd);
 
 		} catch (Exception e) {
 
@@ -197,18 +197,22 @@ public class FtpUtil {
 	 * 
 	 * @throws Exception
 	 */
-
 	private boolean createDir(String dir) {
 
 		try {
 
-			ftpClient.setAsciiType();
+			try {
+				ftpClient.setAsciiType();
+			} catch (FtpProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 			StringTokenizer s = new StringTokenizer(dir, "/"); // sign
 
 			s.countTokens();
 
-			String pathName = ftpClient.pwd();
+			String pathName = ftpClient.getWorkingDirectory();
 
 			while (s.hasMoreElements()) {
 
@@ -216,7 +220,7 @@ public class FtpUtil {
 
 				try {
 
-					ftpClient.sendServer("MKD " + pathName + "\r\n");
+					ftpClient.makeDirectory(pathName);
 
 				} catch (Exception e) {
 
@@ -226,11 +230,11 @@ public class FtpUtil {
 
 				}
 
-				ftpClient.readServerResponse();
+				ftpClient.getLastResponseString();
 
 			}
 
-			ftpClient.binary();
+			ftpClient.setBinaryType();
 
 			return true;
 
@@ -240,7 +244,11 @@ public class FtpUtil {
 
 			return false;
 
+		} catch (FtpProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		return false;
 
 	}
 
@@ -473,7 +481,7 @@ public class FtpUtil {
 
 				return -1;
 
-			os = ftpClient.put(newname);
+			os = (TelnetOutputStream) ftpClient.putFileStream(newname);
 
 			result = attachMent.length();
 
@@ -536,7 +544,7 @@ public class FtpUtil {
 
 		try {
 
-			is = ftpClient.get(filename);
+			is = (TelnetInputStream) ftpClient.getFileStream(filename);
 
 			java.io.File outfile = new java.io.File(newfilename);
 
@@ -551,6 +559,9 @@ public class FtpUtil {
 				result = result + c;
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (FtpProtocolException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {

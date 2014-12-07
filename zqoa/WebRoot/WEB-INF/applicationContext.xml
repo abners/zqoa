@@ -32,14 +32,14 @@
 		</property>
 	</bean>
 
-	<bean name="updateIndexJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<!-- <bean name="updateIndexJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass" value="com.indexJob.UpdateLuenceSearchIndexInTime" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="timeout" value="0" />
 			</map>
 		</property>
-	</bean>
+	</bean> -->
 
 	<!-- 间隔2s执行一次 -->
 <!--	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">-->
@@ -49,22 +49,22 @@
 <!--	</bean>-->
 
 	<!-- 指定时间运行一次 -->
-	 <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> 
+	<!--  <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> 
 	 <property name="jobDetail" ref="updateIndexJob" /> 
-<!--	 每天晚上12:00运行一次 -->
+	 每天晚上12:00运行一次
 	 <property name="cronExpression" value="0 0 23 * * ?" /> 
-	 </bean> 
+	 </bean>  -->
 
 	<!-- 配置任务调度工厂 -->
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<!-- <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-<!--				<ref bean="simpleTrigger" />-->
+				<ref bean="simpleTrigger" />
 
 				<ref bean="cronTrigger" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	<bean id="loginDao" class="com.login.dao.impl.LoginDaoImpl">
 		<property name="sessionFactory" ref="mySessionFactory" />
 	</bean>
