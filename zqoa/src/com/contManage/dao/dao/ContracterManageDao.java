@@ -145,6 +145,7 @@ public interface ContracterManageDao {
 	 * @param zqContractModel 合同信息
 	 * @param zqContractcoscusModels 协办律师信息
 	 * @param zqContractcharagestageModels 付款阶段信息
+	 * @throws Exception 
 	 */
 	public void saveContract(ZqContractModel zqContractModel,
 			ZqContractcoscusModel[] zqContractcoscusModels,

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "struts-2.0.dtd" >
+
+<struts>
+	<package name="case" extends="json-default">
+		<interceptors>
+
+			<!-- 先定义拦截器 -->
+			<interceptor name="myInterceptor" class="interceptor.TrimInterceptor"></interceptor>
+			<interceptor name="loginInterceptor" class="interceptor.LoginInterceptor">
+			</interceptor>
+
+			<!-- 加到自己设置的拦截器栈里边去 -->
+
+			<interceptor-stack name="myStack">
+
+				<interceptor-ref name="myInterceptor">
+
+				</interceptor-ref>
+				<interceptor-ref name="loginInterceptor">
+
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+
+			</interceptor-stack>
+		</interceptors>
+		<!-- 定义默认拦截器 栈 -->
+		<default-interceptor-ref name="myStack" />
+		<default-action-ref name="toLogin">
+		</default-action-ref>
+		<!-- 定义全局Result -->
+		<global-results>
+			<!-- 当返回login视图名时，转入/login.html页面 -->
+			<result name="toLogin">/login.html</result>
+		</global-results>
+		<!-- 案件联系人身份管理 -->
+		<action name="caseContactIdentity" class="com.caseManage.web.CaseManageAction"
+			method="caseContactIdentity">
+			<result>/jsp/case/caseContactIdentity.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 添加案件联系人身份 -->
+		<action name="addCaseIdentity" class="com.caseManage.web.CaseManageAction"
+			method="addCaseIdentity">
+			<result type="json"></result>
+		</action>
+		<!-- 修改案件联系人身份 -->
+		<action name="modifyCaseIdentity" class="com.caseManage.web.CaseManageAction"
+			method="modifyCaseIdentity">
+			<result type="json"></result>
+		</action>
+		<!-- 删除案件联系人身份 -->
+		<action name="deltCaseIdentity" class="com.caseManage.web.CaseManageAction"
+			method="deltCaseIdentity">
+			<result type="json"></result>
+		</action>
+		<!-- 案件类型管理 -->
+		<action name="caseType" class="com.caseManage.web.CaseManageAction"
+			method="listCaseType">
+			<result>/jsp/case/caseType.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 添加案件类型 -->
+		<action name="addCaseType" class="com.caseManage.web.CaseManageAction"
+			method="addCaseType">
+			<result type="json"></result>
+		</action>
+		<!-- 修改案件类型 -->
+		<action name="modifyCaseType" class="com.caseManage.web.CaseManageAction"
+			method="modifyCaseType">
+			<result type="json"></result>
+		</action>
+		<!-- 删除案件类型 -->
+		<action name="deltCaseType" class="com.caseManage.web.CaseManageAction"
+			method="deltCaseType">
+			<result type="json"></result>
+		</action>
+		<!-- 添加案件初始化 -->
+		<action name="addCaseInit" class="com.caseManage.web.CaseManageAction"
+			method="addCaseInit">
+			<result name="success">/jsp/case/addCase.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 获取所有案件 -->
+		<action name="getRelativeCase" class="com.caseManage.web.CaseManageAction"
+			method="getRelativeCase">
+			<result name="success">/jsp/case/relativeCase.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 保存添加的案件信息 -->
+		<action name="addCase" class="com.caseManage.web.CaseManageAction"
+			method="addCase">
+			<result type="json"></result>
+		</action>
+		<!-- 查看案件列表 -->
+		<action name="listCase" class="com.caseManage.web.CaseManageAction"
+			method="listCase">
+			<result name="success">/jsp/case/listCase.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 查看案件详情 -->
+		<action name="caseDetail" class="com.caseManage.web.CaseManageAction"
+			method="caseDetail">
+			<result name="success">/jsp/case/caseDetail.jsp</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 添加案件事件初始化 -->
+		<action name="addCaseProcessInit" class="com.caseManage.web.CaseManageAction"
+			method="addCaseProcessInit">
+			<result>/jsp/case/addCaseProcess.jsp</result>
+		</action>
+		
+		<!-- 修改案件事件初始化 -->
+		<action name="modifyCaseProcessInit" class="com.caseManage.web.CaseManageAction"
+			method="modifyCaseProcessInit">
+			<result>/jsp/case/modifyCaseProcess.jsp</result>
+		</action>
+		<!-- 修改案件事件 -->
+		<action name="modifyCaseProcess" class="com.caseManage.web.CaseManageAction" method="modifyCaseProcess">
+			<result type="json"></result>
+		</action>
+		<!-- 添加附件 -->
+		<action name="addFile" class="com.FileManage.web.FileManage"
+			method="addFile">
+			<result type="json"></result>
+		</action>
+		<!-- 添加案件事件 -->
+		<action name="addCaseProcess" class="com.caseManage.web.CaseManageAction"
+			method="addCaseProcess">
+			<result type="json"></result>
+		</action>
+		<!-- 删除案件事件 -->
+		<action name="deltCaseProcess" class="com.caseManage.web.CaseManageAction"
+			method="deltCaseProcess">
+			<result type="json"></result>
+		</action>
+		<!-- 添加案件联系人初始化 -->
+		<action name="addCaseContactInit" class="com.caseManage.web.CaseManageAction"
+			method="addCaseContactInit">
+			<result>/jsp/case/addCaseContacter.jsp</result>
+		</action>
+		<!-- 添加案件联系人 -->
+		<action name="addCaseContact" class="com.caseManage.web.CaseManageAction"
+			method="addCaseContact">
+			<result type="json"></result>
+		</action>
+		<!-- 修改案件联系人信息初始化 -->
+		<action name="modifyCaseContacterInit" class="com.caseManage.web.CaseManageAction"
+			method="modifyCaseContacterInit">
+			<result>/jsp/case/modifyCaseContacter.jsp</result>
+		</action>
+		<!-- 修改案件联系人 -->
+		<action name="modifyCaseContact" class="com.caseManage.web.CaseManageAction"
+			method="modifyCaseContact">
+			<result type="json"></result>
+		</action>
+		
+		<!-- 删除案件联系人 -->
+		<action name="deltCaseContact" class="com.caseManage.web.CaseManageAction"
+			method="deltCaseContact">
+			<result type="json"></result>
+		</action>
+		<!-- 导出案件联系人 -->
+		<action name="exportCaseContact" class="com.FileManage.web.FileManage"
+			method="exportCaseContact">
+			<result name="success" type="stream">
+				<!-- 文件类型 -->
+				<param name="contentType">application/vnd.ms-excel</param>
+				<!-- excelStream 与对应action中的输入流的名字要一致 -->
+				<param name="inputName">caseContactMess</param>
+				<!-- 文件名 与action中fileName一致 -->
+				<param name="contentDisposition">attachment;filename=" ${fileName}.xls"</param>
+				<param name="bufferSize">1024</param>
+			</result>
+			<result name="error">/WEB-INF/page/msg_error.jsp</result>
+		</action>
+		<!-- 查看完结案件 -->
+		<action name="listEndCase" class="com.caseManage.web.CaseManageAction"
+			method="listEndCase">
+			<result>/jsp/case/listEndCase.jsp</result>
+		</action>
+		<!-- 结案 -->
+		<action name="closeCase" class="com.caseManage.web.CaseManageAction"
+			method="closeCase">
+			<result type="json"></result>
+		</action>
+		<!-- 结案 -->
+		<action name="openCase" class="com.caseManage.web.CaseManageAction"
+			method="openCase">
+			<result type="json"></result>
+		</action>
+		<!-- 删除案件及其相关信息 -->
+		<action name="deltCase" class="com.caseManage.web.CaseManageAction"
+			method="deltCase">
+			<result type="json"></result>
+		</action>
+		<!-- 修改案件信息 -->
+		<action name="modifyCaseMessInit" class="com.caseManage.web.CaseManageAction"
+			method="modifyCaseMessInit">
+			<result name="success">/jsp/case/modifyCase.jsp</result>
+		</action>
+		<action name="modifyCase" class="com.caseManage.web.CaseManageAction"
+			method="modifyCase">
+			<result type="json"></result>
+		</action>
+		<!-- 附件下载 -->
+		<action name="dowloadFile" class="com.FileManage.web.FileManage" method="dowloadFile">
+			<result name="success" type="stream">
+				<!-- 指定下载文件的内容类型，text/plain是默认类型 -->
+				<param name="contentType">text/plain</param>
+				<!-- inputName默认值是inputStream，如果action中用于读取下载文件内容的属性名是inputStream，那么可以省略这个参数 -->
+				<param name="inputName">inputStream</param>
+				<!--动态获取文件名，从Action中的取得filename -->
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">2048</param>
+			</result>
+			<result name="input">/error/error.jsp</result>
+		</action>
+		<!-- 案件联系人导入初始化 -->
+		<action name="importCaseContactInit" class="com.caseManage.web.CaseManageAction" method="">
+			<result>/jsp/case/import_case_contact.jsp</result>
+		</action>
+		<!-- 合同前案件添加初始化 -->
+		<action name="addCaseBeforeContInit" class="com.caseManage.web.CaseManageAction" method="addCaseBeforeContInit">
+			<result>/jsp/case/addCaseBeforeCont.jsp</result>
+		</action>
+		<!-- 合同前案列表 -->
+		<action name="listCaseBeforeCont" class="com.caseManage.web.CaseManageAction" method="listCaseBeforeCont">
+			<result>/jsp/case/listCaseBeforeCont.jsp</result>
+		</action>
+		<!-- 合同前案件详情 -->
+		<action name="caseBeforeContDetail" class="com.caseManage.web.CaseManageAction" method="caseBeforeContDetail">
+			<result>/jsp/case/caseDetail.jsp</result>
+		</action>
+	</package>
+
+</struts>
+

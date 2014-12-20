@@ -170,10 +170,10 @@ public class ContracterManageEbo extends EcPageHelper implements
 				}
 			}
 			try {
+				zqContractModel.setArchived("0");
 				contracterManageDao.saveContract(zqContractModel,
 						zqContractcoscusModels, zqContractcharagestageModels);
-			} catch (HibernateException e) {
-				// TODO: handle exception
+			} catch (Exception e) {
 				return "0";
 			}
 			//已存在该合同编号

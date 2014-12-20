@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "struts-2.0.dtd" >
+
+<struts>
+	<package name="tools" extends="json-default">
+		<interceptors>
+
+			<!-- 先定义拦截器 -->
+			<interceptor name="myInterceptor" class="interceptor.TrimInterceptor"></interceptor>
+			<interceptor name="loginInterceptor" class="interceptor.LoginInterceptor">
+			</interceptor>
+
+			<!-- 加到自己设置的拦截器栈里边去 -->
+
+			<interceptor-stack name="myStack">
+
+				<interceptor-ref name="myInterceptor">
+
+				</interceptor-ref>
+				<interceptor-ref name="loginInterceptor">
+
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+
+			</interceptor-stack>
+		</interceptors>
+		<!-- 定义默认拦截器 栈 -->
+		<default-interceptor-ref name="myStack" />
+		<default-action-ref name="toLogin">
+		</default-action-ref>
+		<!-- 定义全局Result -->
+		<global-results>
+			<!-- 当返回login视图名时，转入/login.html页面 -->
+			<result name="toLogin">/login.html</result>
+		</global-results>
+		<action name="toolsTypeManage" class="com.commonTools.web.ToolsTypeManageAction"
+			method="toolsTypeManage">
+			<result>/jsp/tools/toolTypes.jsp</result>
+		</action>
+		
+		<!-- 添加工具分类 -->
+		<action name="addType" class="com.commonTools.web.ToolsTypeManageAction"
+			method="addType">
+			<result type="json"></result>
+		</action>
+		<action name="deltToolsType" class="com.commonTools.web.ToolsTypeManageAction"
+			method="deltToolsType">
+			<result type="json"></result>
+		</action>
+		<!-- 修改工具类型名称 -->
+		<action name="modifyToolsType" class="com.commonTools.web.ToolsTypeManageAction"
+			method="modifyToolsType">
+			<result type="json"></result>
+		</action>
+		<!-- 添加工具初始化 -->
+		<action name="addToolsInit" class="com.commonTools.web.ToolsTypeManageAction"
+			method="addToolsInit">
+			<result>/jsp/tools/addTools1.jsp</result>
+		</action>
+		<action name="addTools" class="com.commonTools.web.ToolsTypeManageAction"
+			method="addTools">
+			<result name="success" type="redirect">addToolsInit.htm</result>
+			<result name="error">/jsp/tools/error.jsp</result>
+		</action>
+		<!-- 工具列表 -->
+		<action name="toolsList"  class="com.commonTools.web.ToolsTypeManageAction"
+			method="toolsList">
+			<result>/jsp/tools/toolsList.jsp</result>
+		</action>
+		<!-- 修改工具信息初始化 -->
+		<action name="modifyToolsInit"  class="com.commonTools.web.ToolsTypeManageAction"
+			method="modifyToolsInit">
+			<result>/jsp/tools/modifyTools.jsp</result>
+		</action>
+		<!-- 更新工具信息 -->
+		<action name="updateTools" class="com.commonTools.web.ToolsTypeManageAction"
+			method="updateTools">
+			<result name="success" type="redirect">toolsList.htm</result>
+			<result name="error">/jsp/tools/error.jsp</result>
+		</action>
+		<!-- 删除工具 -->
+		<action name="deltTools" class="com.commonTools.web.ToolsTypeManageAction"
+			method="deltTools">
+			<result type="json"></result>
+		</action>
+		<!-- 资产类型 -->
+		<action name="assetsType" class="com.commonTools.web.ToolsTypeManageAction"
+			method="assetsType">
+			<result>/jsp/tools/assetsTypes.jsp</result>
+		</action>
+		<!-- 添加资产类型 -->
+		<action name="addAssetsType" class="com.commonTools.web.ToolsTypeManageAction"
+			method="addAssetsType">
+			<result type="json"></result>
+		</action>
+		<!-- 删除资产类型 -->
+		<action name="deltAssetsType" class="com.commonTools.web.ToolsTypeManageAction"
+		method="deltAssetsType">
+			<result type="json"></result>
+		</action>
+		<action name="modifyAssetsType" class="com.commonTools.web.ToolsTypeManageAction"
+		method="modifyAssetsType">
+			<result type="json"></result>
+		</action>
+		<!-- 添加资产初始化 -->
+		<action name="addAssetsInit" class="com.commonTools.web.ToolsTypeManageAction"
+			method="addAssetsInit">
+			<result>/jsp/tools/addAssets.jsp</result>
+		</action>
+		<!-- 添加资产 -->
+		<action name="addAssets" class="com.commonTools.web.ToolsTypeManageAction" method="addAssets">
+			<result type="json"></result>
+		</action>
+		<!-- 资产列表 -->
+		<action name="assetsList" class="com.commonTools.web.ToolsTypeManageAction" method="assetsList">
+			<result>/jsp/tools/assetsList.jsp</result>
+		</action>
+		<!-- 资产详情 -->
+		<action name="assetDetail" class="com.commonTools.web.ToolsTypeManageAction" method="assetDetail">
+			<result>/jsp/tools/assetDetail.jsp</result>
+		</action>
+		<!-- 资产修改初始化 -->
+		<action name="modifyAssetInit" class="com.commonTools.web.ToolsTypeManageAction" method="modifyAssetInit">
+			<result>/jsp/tools/assetModify.jsp</result>
+		</action>
+		<action name="modifyAssets" class="com.commonTools.web.ToolsTypeManageAction" method="modifyAssets">
+			<result type="json"></result>
+		</action>
+		
+	</package>
+</struts>

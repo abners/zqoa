@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "struts-2.0.dtd" >
+
+<struts>
+	<package name="asr" extends="json-default">
+		<interceptors>
+
+			<!-- 先定义拦截器 -->
+			<interceptor name="myInterceptor" class="interceptor.TrimInterceptor"></interceptor>
+			<interceptor name="loginInterceptor" class="interceptor.LoginInterceptor">
+			</interceptor>
+
+			<!-- 加到自己设置的拦截器栈里边去 -->
+
+			<interceptor-stack name="myStack">
+
+				<interceptor-ref name="myInterceptor">
+
+				</interceptor-ref>
+				<interceptor-ref name="loginInterceptor">
+
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+
+			</interceptor-stack>
+		</interceptors>
+		<!-- 定义默认拦截器 栈 -->
+		<default-interceptor-ref name="myStack" />
+		<default-action-ref name="toLogin">
+		</default-action-ref>
+		<!-- 定义全局Result -->
+		<global-results>
+			<!-- 当返回login视图名时，转入/login.html页面 -->
+			<result name="toLogin">/login.html</result>
+		</global-results>
+		<!-- 行政事务登记 -->
+		<action name="asr" class="com.executiveManage.web.ExecutiveAction" method="asrInit">
+			<result>/jsp/administration/asr.jsp</result>
+		</action>
+		<!-- 登记管理 -->
+		<action name="listAsr" class="com.executiveManage.web.ExecutiveAction" method="listAsr">
+			<result>/jsp/administration/listAsr.jsp</result>
+		</action>
+		<!-- 保存添加的行政事务 -->
+		<action name="saveZqAsr" class="com.executiveManage.web.ExecutiveAction" method="saveZqAsr">
+			<result type="json"></result>
+		</action>
+		<!-- 修改行政事务登记初始化 -->
+		<action name="modifyAsrInit" class="com.executiveManage.web.ExecutiveAction" method="modifyAsrInit">
+			<result>/jsp/administration/asrModify.jsp</result>
+		</action>
+		<!-- 修改行政事务 -->
+		<action name="modifyZqAsr" class="com.executiveManage.web.ExecutiveAction" method="modifyZqAsr">
+			<result type="json"></result>
+		</action>
+		<!-- 删除行政事务 -->
+		<action name="deltAsr" class="com.executiveManage.web.ExecutiveAction" method="deltAsr">
+			<result type="json"></result>
+		</action>
+		<!-- 查看行政事务详情 -->
+		<action name="asrDetail" class="com.executiveManage.web.ExecutiveAction" method="asrDetail">
+			<result>/jsp/administration/asrDetail.jsp</result>
+		</action>
+		<!-- 添加公告初始化 -->
+		<action name="announce"  class="com.executiveManage.web.ExecutiveAction" method="announceInit">
+			<result>/jsp/administration/announce.jsp</result>
+		</action>
+		<!-- 保存添加的公告 -->	
+		<action name="saveZqAnnounce" class="com.executiveManage.web.ExecutiveAction" method="saveZqAnnounce">
+			<result type="json"></result>
+		</action>
+		<!-- 公告列表 -->
+		<action name="announceList" class="com.executiveManage.web.ExecutiveAction" method="announceList">
+			<result>/jsp/administration/announce_list.jsp</result>
+		</action>
+		<!-- 公告详情 -->
+		<action name="announceDetail" class="com.executiveManage.web.ExecutiveAction" method="announceDetail">
+			<result>/jsp/administration/announce_detail.jsp</result>
+		</action>
+		<!-- 删除公告 -->
+		<action name="deltAnnounce" class="com.executiveManage.web.ExecutiveAction" method="deltAnnounce">
+			<result type="json"></result>
+		</action>
+		<!-- 修改公告初始化 -->
+		<action name="modifyAnnounceInit" class="com.executiveManage.web.ExecutiveAction" method="modifyAnnounceInit">
+			<result>/jsp/administration/modify_announce.jsp</result>
+		</action>
+		<!-- 修改公告 -->
+		<action name="modifyZqNotice" class="com.executiveManage.web.ExecutiveAction" method="modifyZqNotice">
+			<result type="json"></result>
+		</action>
+		<!-- 添加事务申请初始化 -->
+		<action name="serApplication" >
+			<result>/jsp/administration/addSerApp.jsp</result>
+		</action>
+		<!-- 添加每日事物初始化 -->
+		<action name="addSerRecordInit" class="com.executiveManage.web.ExecutiveAction" method="addSerRecordInit">
+			<result>/jsp/administration/serRecord.jsp</result>
+		</action>
+		<!-- 添加每日事物 -->
+		<action name="saveZqSerRecord" class="com.executiveManage.web.ExecutiveAction" method="saveZqSerRecord">
+			<result type="json"></result>
+		</action>
+		<!-- 查看每日事物列表 -->
+		<action name="listSerRecord" class="com.executiveManage.web.ExecutiveAction" method="listSerRecord">
+			<result>/jsp/administration/ser_record_list.jsp</result>
+		</action>
+		<!-- 查看事物详情 -->
+		<action name="serRecordDetail" class="com.executiveManage.web.ExecutiveAction" method="serRecordDetail">
+			<result>/jsp/administration/ser_record_detail.jsp</result>
+		</action>
+	</package>
+</struts>

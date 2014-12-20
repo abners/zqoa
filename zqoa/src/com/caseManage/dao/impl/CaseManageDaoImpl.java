@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.solr.common.SolrInputDocument;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -32,6 +33,7 @@ import com.util.ExtremeTablePage;
 import com.util.Log4j;
 import com.util.MethodUtils;
 import com.util.PageBean;
+import com.util.SolrJUtil;
 
 /**
  * 案件管理持久层实现
@@ -41,6 +43,8 @@ import com.util.PageBean;
  */
 public class CaseManageDaoImpl extends HibernateDaoSupport implements
 		CaseManageDao {
+	private static final Integer CASE_INDEX = null;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -327,6 +331,7 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 			transaction = session.beginTransaction();
 			// 案件id，保存案件信息
 			Integer caseId = (Integer) session.save(zqCaseModel);
+			addCaseToSolrIndex(caseId,zqCaseModel);
 			if (zqContractcoscusModels != null) {
 				for (ZqContractcoscusModel zqContractcoscusModel : zqContractcoscusModels) {
 					zqContractcoscusModel.setCaseId(caseId);
@@ -342,6 +347,24 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 			throw e;
 		} finally {
 			session.close();
+		}
+	}
+
+	private void addCaseToSolrIndex(Integer caseId, ZqCaseModel zqCaseModel) {
+		if (caseId != null) {
+			SolrInputDocument document = new SolrInputDocument();
+			document.addField("id", caseId+CASE_INDEX);
+			document.addField("cont_number", zqCaseModel.getNumber());
+			document.addField("cont_name", zqCaseModel.getCaseName());
+			document.addField("cont_type_name",
+					zqCaseModel.getTypeName());
+			document.addField("index_type", "2");
+			document.addField("status", zqCaseModel.getStatus());
+			document.addField("lawyer_name", zqCaseModel.getLawyerName());
+			document.addField("cust_name", zqCaseModel.getCustName());
+			List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
+			documents.add(document);
+			SolrJUtil.add(documents);
 		}
 	}
 

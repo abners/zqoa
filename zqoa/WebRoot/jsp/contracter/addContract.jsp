@@ -371,7 +371,7 @@ $(document).ready(function(){
 									"open");
 				},
 				success : function(data) { //成功后返回的页面
-					//alert(data.status);
+					alert(data.status);
 					if (data.status == '0') {
 						$("#ajax-action-dialog").dialog("close");
 						alert("添加失败，请稍后重试!");
@@ -386,7 +386,7 @@ $(document).ready(function(){
 				},
 				error:function(error){
 					$("#ajax-action-dialog").dialog("close");
-					alert("系统异常，请联系管理员!");
+					alert("系统异常，请联系管理员!"+error);
 				}
 			});
 		}

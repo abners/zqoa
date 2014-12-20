@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.management.RuntimeErrorException;
 
+import org.apache.solr.common.SolrInputDocument;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -30,6 +31,7 @@ import com.util.ExtremeTablePage;
 import com.util.Log4j;
 import com.util.MethodUtils;
 import com.util.PageBean;
+import com.util.SolrJUtil;
 
 /**
  * 合同管理持久层实现
@@ -39,6 +41,8 @@ import com.util.PageBean;
  */
 public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 		ContracterManageDao {
+	private static final String CONTRACT_INDEX = "_cont";
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -129,68 +133,91 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public void saveContract(ZqContractModel zqContractModel,
 			ZqContractcoscusModel[] zqContractcoscusModels,
-			List<ZqContractcharagestageModel> zqContractcharagestageModels) throws HibernateException{
+			List<ZqContractcharagestageModel> zqContractcharagestageModels) {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			//新增合同
+			// 新增合同
 			Integer contractId = (Integer) session.save(zqContractModel);
-			if(zqContractcoscusModels!=null){
-				//保存协办律师信息
-				for(ZqContractcoscusModel zqContractcoscusModel:zqContractcoscusModels){
+			if (zqContractcoscusModels != null) {
+				// 保存协办律师信息
+				for (ZqContractcoscusModel zqContractcoscusModel : zqContractcoscusModels) {
 					zqContractcoscusModel.setContractId(contractId);
 					session.save(zqContractcoscusModel);
 				}
-				
+
 			}
-			if(zqContractcharagestageModels.size()>0){
-				for(ZqContractcharagestageModel zqContractcharagestageModel:zqContractcharagestageModels){
+			if (zqContractcharagestageModels.size() > 0) {
+				for (ZqContractcharagestageModel zqContractcharagestageModel : zqContractcharagestageModels) {
 					zqContractcharagestageModel.setContractId(contractId);
 					session.save(zqContractcharagestageModel);
 				}
 			}
+			// 添加合同信息到solr索引中
+			addContractToSolr(contractId, zqContractModel);
 			transaction.commit();
 		} catch (HibernateException e) {
 			// TODO: handle exception
-			if(transaction!=null)
+			if (transaction != null)
 				// 回滚操作
 				transaction.rollback();
 			e.printStackTrace();
 			throw new HibernateException(e);
-		}finally{
+		} finally {
 			session.close();
 		}
-		
 
+	}
+
+	private void addContractToSolr(Integer contractId,
+			ZqContractModel zqContractModel) {
+		if (contractId != null) {
+			SolrInputDocument document = new SolrInputDocument();
+			document.addField("id", contractId+CONTRACT_INDEX);
+			document.addField("cont_number", zqContractModel.getNumber());
+			document.addField("cont_name", zqContractModel.getContName());
+			document.addField("cont_type_name",
+					zqContractModel.getContTypeName());
+			document.addField("index_type", "1");
+			document.addField("status", zqContractModel.getArchived());
+			document.addField("lawyer_name", zqContractModel.getLawyerName());
+			document.addField("cust_name", zqContractModel.getCustName());
+			List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
+			documents.add(document);
+			SolrJUtil.add(documents);
+		}
 	}
 
 	@Override
 	public PageBean queryContractList(Map conditionMap) {
 		// TODO Auto-generated method stub
 		HibernateTemplate dao = getHibernateTemplate();
-		//获取登录用户信息
+		// 获取登录用户信息
 		ZqUserModel zqUserModel = MethodUtils.getUserInfoModel();
 		String condition = "";
-		//生成条件数组
+		// 生成条件数组
 		Object[] condIntegerss = null;
-		//用户是超级管理员
-		if(zqUserModel.getIsManage().equals("1")){
-			condIntegerss = new Object[] {(String)conditionMap.get("archived")};
-		}else{
+		// 用户是超级管理员
+		if (zqUserModel.getIsManage().equals("1")) {
+			condIntegerss = new Object[] { (String) conditionMap
+					.get("archived") };
+		} else {
 			Integer userId = zqUserModel.getId();
-			condIntegerss = new Object[] {(String)conditionMap.get("archived"),userId,userId,userId};
-			//查询主办律师或合同的创建者或协办律师为当前登录用户
+			condIntegerss = new Object[] {
+					(String) conditionMap.get("archived"), userId, userId,
+					userId };
+			// 查询主办律师或合同的创建者或协办律师为当前登录用户
 			condition = " and (creater=? or lawyer=? or id in(select contractId from ZqContractcoscusModel where lawyerId=? )) ";
 		}
-		
+
 		PageBean pageBean = (PageBean) conditionMap.get("pageBean");
-		
+
 		// 获取总记录数目
-		int totalRows = pageBean.getTotalRows(dao, SELECT_CONTRACT_COUNT + condition,
-				condIntegerss);
+		int totalRows = pageBean.getTotalRows(dao, SELECT_CONTRACT_COUNT
+				+ condition, condIntegerss);
 
 		// 每页记录数
 		final int length = pageBean.getPageSize();
@@ -198,8 +225,8 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 		final int offset = pageBean.countOffset(length, pageBean.getPage());
 
 		@SuppressWarnings("unchecked")
-		List<ZqContractModel> list = ExtremeTablePage.queryListByPage(
-				offset, length, SELECT_CONTRACT + condition, condIntegerss, dao);
+		List<ZqContractModel> list = ExtremeTablePage.queryListByPage(offset,
+				length, SELECT_CONTRACT + condition, condIntegerss, dao);
 		pageBean.setList(list);
 
 		return pageBean;
@@ -216,32 +243,34 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	public List<ZqContractcharagestageModel> queryCharageStageByContid(
 			Integer contId) {
 		// TODO Auto-generated method stub
-		return getHibernateTemplate().find(SELECT_CHARGESTAGE,contId);
+		return getHibernateTemplate().find(SELECT_CHARGESTAGE, contId);
 	}
 
 	@Override
 	public List<ZqContractcoscusModel> queryCoscusByContid(Integer contId) {
 		// TODO Auto-generated method stub
-		//Session session;
-		return getHibernateTemplate().find(SELECT_COSCUS,contId);
+		// Session session;
+		return getHibernateTemplate().find(SELECT_COSCUS, contId);
 	}
 
 	@Override
-	public void deltCoscusByid(ZqContractcoscusModel zqContractcoscusModel){
+	public void deltCoscusByid(ZqContractcoscusModel zqContractcoscusModel) {
 		// TODO Auto-generated method stub
 		getHibernateTemplate().delete(zqContractcoscusModel);
-		//getHibernateTemplate().bulku
+		// getHibernateTemplate().bulku
 	}
 
 	@Override
 	public void updateContract(Integer[] chargeIdArray,
 			ZqContractModel zqContractModel,
 			ZqContractcoscusModel[] zqContractcoscusModels,
-			List<ZqContractcharagestageModel> zqContractcharagestageModels)throws HibernateException{
+			List<ZqContractcharagestageModel> zqContractcharagestageModels)
+			throws HibernateException {
 		// TODO Auto-generated method stub
 		String hql = "delete ZqContractcharagestageModel where id=:chargeId ";
 		Session session = this.getSession();
 		Transaction transaction = null;
+		addContractToSolr(zqContractModel.getId(), zqContractModel);
 		try {
 			transaction = session.beginTransaction();
 			if (chargeIdArray != null) {
@@ -252,57 +281,60 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 							.executeUpdate();
 				}
 			}
-			//添加新的协办律师
-			if(zqContractcoscusModels!=null){
-				for(ZqContractcoscusModel zqContractcoscusModel:zqContractcoscusModels){
+			// 添加新的协办律师
+			if (zqContractcoscusModels != null) {
+				for (ZqContractcoscusModel zqContractcoscusModel : zqContractcoscusModels) {
 					session.save(zqContractcoscusModel);
 				}
 			}
-			//添加新的付费阶段
-			for(ZqContractcharagestageModel zqContractcharagestageModel:zqContractcharagestageModels){
+			// 添加新的付费阶段
+			for (ZqContractcharagestageModel zqContractcharagestageModel : zqContractcharagestageModels) {
 				session.save(zqContractcharagestageModel);
 			}
-			//更新合同信息
+			// 更新合同信息
 			session.update(zqContractModel);
-			//提交事务
+			// 提交事务
 			transaction.commit();
 		} catch (HibernateException e) {
 			// TODO: handle exception
-			if(transaction!=null)
+			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
 			throw new HibernateException(e);
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
 
 	@Override
-	public void deletContById(Integer contId) throws HibernateException{
+	public void deletContById(Integer contId) throws HibernateException {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Transaction transaction = null;
-		
-		try{
+
+		try {
 			transaction = session.beginTransaction();
-			//删除协办律师
-			session.createQuery(deltCoscus).setInteger("contId", contId).executeUpdate();
-			//删除付费阶段信息
-			session.createQuery(deltChargestage).setInteger("contId",contId).executeUpdate();
-			//删除合同事务信息
-			session.createQuery(deltContAffair).setInteger("contId", contId).executeUpdate();
-			//删除合同本身信息
-			session.createQuery(deltContSql).setInteger("contId", contId).executeUpdate();
-			
-			
+			// 删除协办律师
+			session.createQuery(deltCoscus).setInteger("contId", contId)
+					.executeUpdate();
+			// 删除付费阶段信息
+			session.createQuery(deltChargestage).setInteger("contId", contId)
+					.executeUpdate();
+			// 删除合同事务信息
+			session.createQuery(deltContAffair).setInteger("contId", contId)
+					.executeUpdate();
+			// 删除合同本身信息
+			session.createQuery(deltContSql).setInteger("contId", contId)
+					.executeUpdate();
+
 			transaction.commit();
-			
-		}catch (HibernateException e) {
+
+		} catch (HibernateException e) {
 			// TODO: handle exception
-			if(transaction!=null)
+			if (transaction != null)
 				transaction.rollback();
 			throw new HibernateException(e);
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -331,20 +363,21 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	}
 
 	@Override
-	public void addContAffair(ZqContractAffairModel zqContractAffairModel) throws HibernateException{
+	public void addContAffair(ZqContractAffairModel zqContractAffairModel)
+			throws HibernateException {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Transaction transaction = null;
-		try{
+		try {
 			transaction = session.beginTransaction();
 			session.save(zqContractAffairModel);
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			// TODO: handle exception
-			if(transaction!=null)
+			if (transaction != null)
 				transaction.rollback();
 			throw e;
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -352,29 +385,35 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public List queryContAffairByContId(Integer contId) {
 		// TODO Auto-generated method stub
-		return getHibernateTemplate().find(SELECT_CONTAFFAIR_BY_CONTID,contId);
+		return getHibernateTemplate().find(SELECT_CONTAFFAIR_BY_CONTID, contId);
 	}
 
 	@Override
 	public List<ZqCaseModel> queryContTypeList(Integer contId) {
 		// TODO Auto-generated method stub
-		return getHibernateTemplate().find("select new ZqCaseModel(id,caseName) from ZqCaseModel where contId=?",contId);
+		return getHibernateTemplate()
+				.find("select new ZqCaseModel(id,caseName) from ZqCaseModel where contId=?",
+						contId);
 	}
 
 	@Override
-	public void updateContractArchived(Integer contId,String archived) throws HibernateException{
+	public void updateContractArchived(Integer contId, String archived)
+			throws HibernateException {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Transaction transaction = null;
-		try{
+		try {
 			transaction = session.beginTransaction();
-			
-			session.createQuery("update ZqContractModel set archived=? where id=?").setString(0, archived).setInteger(1, contId).executeUpdate();
-			
+
+			session.createQuery(
+					"update ZqContractModel set archived=? where id=?")
+					.setString(0, archived).setInteger(1, contId)
+					.executeUpdate();
+
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			// TODO: handle exception
-			if(transaction != null)
+			if (transaction != null)
 				transaction.rollback();
 			throw e;
 		}
@@ -386,24 +425,24 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 		Session session = this.getSession();
 		Transaction transaction = null;
 		String busId = zqBusFileModel.getBusId();
-		try{
+		try {
 			transaction = session.beginTransaction();
-			
-			for(String fileId:fileids){
+
+			for (String fileId : fileids) {
 				zqBusFileModel = new ZqBusFileModel();
 				zqBusFileModel.setBusId(busId);
-				//业务model中加入文件id
+				// 业务model中加入文件id
 				zqBusFileModel.setFileId(Integer.valueOf(fileId));
 				session.save(zqBusFileModel);
 			}
-			
+
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			// TODO: handle exception
-			if(transaction!=null)
+			if (transaction != null)
 				transaction.rollback();
 			throw e;
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -411,9 +450,9 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public List<ZqFileModel> queryContFile(Integer contId) {
 		// TODO Auto-generated method stub
-		String hql = "select new ZqFileModel(a.id,a.ywjm,a.realFilename,a.address,a.creater,a.createTime) " +
-				     "          from ZqFileModel a,ZqBusFileModel b  where a.id=b.fileId  and b.busId=?";
-		return getHibernateTemplate().find(hql,contId.toString());
+		String hql = "select new ZqFileModel(a.id,a.ywjm,a.realFilename,a.address,a.creater,a.createTime) "
+				+ "          from ZqFileModel a,ZqBusFileModel b  where a.id=b.fileId  and b.busId=?";
+		return getHibernateTemplate().find(hql, contId.toString());
 	}
 
 	@Override
@@ -421,24 +460,26 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Transaction transaction = null;
-		try{
-			ZqFileModel zqFileModel = (ZqFileModel) session.get(ZqFileModel.class, fileId);
+		try {
+			ZqFileModel zqFileModel = (ZqFileModel) session.get(
+					ZqFileModel.class, fileId);
 			transaction = session.beginTransaction();
-			//删除附件信息
+			// 删除附件信息
 			session.delete(zqFileModel);
-			//删除业务附件
-			session.createQuery("delete ZqBusFileModel where fileId=?").setInteger(0, fileId).executeUpdate();
+			// 删除业务附件
+			session.createQuery("delete ZqBusFileModel where fileId=?")
+					.setInteger(0, fileId).executeUpdate();
 			transaction.commit();
-			//如果磁盘文件存在，则删除
+			// 如果磁盘文件存在，则删除
 			String address = zqFileModel.getAddress();
-			MethodUtils.deltFiles(new String[]{address});	
-			
-		}catch (Exception e) {
+			MethodUtils.deltFiles(new String[] { address });
+
+		} catch (Exception e) {
 			// TODO: handle exception
-			if(transaction!=null)
+			if (transaction != null)
 				transaction.rollback();
 			throw e;
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -449,20 +490,19 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Transaction transaction = null;
-		try{
+		try {
 			transaction = session.beginTransaction();
-			for(ZqContractcharagestageModel zqContractcharagestageModel:zqContractcharagestageModels){
+			for (ZqContractcharagestageModel zqContractcharagestageModel : zqContractcharagestageModels) {
 				session.update(zqContractcharagestageModel);
 			}
 			transaction.commit();
-			
-			
-		}catch (HibernateException e) {
+
+		} catch (HibernateException e) {
 			// TODO: handle exception
-			if(transaction!=null)
+			if (transaction != null)
 				transaction.rollback();
 			throw e;
-		}finally{
+		} finally {
 			session.close();
 		}
 	}
@@ -470,9 +510,11 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public boolean checkTheContNumIfExists(String number) {
 		// TODO Auto-generated method stub
-		int num = ((Long)getHibernateTemplate().find("select count(*) from ZqContractModel where number=?",number).iterator().next()).intValue();
-		//不存在该合同编号
-		if(num==0){
+		int num = ((Long) getHibernateTemplate()
+				.find("select count(*) from ZqContractModel where number=?",
+						number).iterator().next()).intValue();
+		// 不存在该合同编号
+		if (num == 0) {
 			return true;
 		}
 		return false;
@@ -481,7 +523,9 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public int countCaseInCont(Integer contId) {
 		// TODO Auto-generated method stub
-		return ((Long)getHibernateTemplate().find("select count(*) from ZqCaseModel where contId=?",contId).iterator().next()).intValue();
+		return ((Long) getHibernateTemplate()
+				.find("select count(*) from ZqCaseModel where contId=?", contId)
+				.iterator().next()).intValue();
 	}
 
 }

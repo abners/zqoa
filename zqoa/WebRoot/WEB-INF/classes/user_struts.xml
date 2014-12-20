@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "struts-2.0.dtd" >
+
+<struts>
+	<package name="user" extends="json-default">
+		<interceptors>
+
+			<!-- 先定义拦截器 -->
+			<interceptor name="myInterceptor" class="interceptor.TrimInterceptor"></interceptor>
+				<interceptor name="loginInterceptor" class="interceptor.LoginInterceptor">
+				</interceptor>
+
+				<!-- 加到自己设置的拦截器栈里边去 -->
+
+				<interceptor-stack name="myStack">
+
+					<interceptor-ref name="myInterceptor">
+
+					</interceptor-ref>
+					<interceptor-ref name="loginInterceptor">
+
+					</interceptor-ref>
+					<interceptor-ref name="defaultStack"></interceptor-ref>
+
+				</interceptor-stack>
+		</interceptors>
+		<!-- 定义默认拦截器 栈-->
+		<default-interceptor-ref name="myStack" />
+		<default-action-ref name="toLogin">
+		</default-action-ref>
+		<!-- 定义全局Result -->
+		<global-results>
+			<!-- 当返回login视图名时，转入/login.html页面 -->
+			<result name="toLogin">/login.html</result>
+		</global-results>
+		<!-- 用户组管理 -->
+		<action name="userGroupManage" class="com.personalManage.web.UserManageAction" method="listUserGroup">
+			<result name="success">/jsp/user/userGroup.jsp</result>	
+		</action>
+		<!-- 权限管理 -->
+		<action name="editPowerInit" class="com.personalManage.web.UserManageAction" method="editPowerInit">
+		<result>/jsp/user/power.jsp</result>
+		</action>
+		<!-- 保存权限 -->
+		<action name="saveEditPower" class="com.personalManage.web.UserManageAction" method="saveEditPower">
+			<result type="json"></result>
+		</action>
+		<!-- 添加用户组 -->
+		<action name="addUserGroup" class="com.personalManage.web.UserManageAction" method="addUserGroup">
+			<result type="json"></result>
+		</action>
+		<!-- 删除用户组 -->
+		<action name="deltUserGroup" class="com.personalManage.web.UserManageAction" method="deltUserGroup">
+			<result type="json"></result>
+		</action>
+		<!-- 添加用户初始化 -->
+		<action name="addUserInit"  class="com.personalManage.web.UserManageAction" method="addUserInit">
+			<result>/jsp/user/addUser.jsp</result>
+		</action>
+		<!-- 保存添加的用户 -->
+		<action name="addUser" class="com.personalManage.web.UserManageAction" method="addUser">
+			<result type="json"></result>
+		</action>
+		<!-- 用户列表 -->
+		<action name="listUser"  class="com.personalManage.web.UserManageAction" method="listUser">
+			<result>/jsp/user/userlist.jsp</result>
+		</action>
+		<!-- 停用用户账户 -->
+		<action name="closeAccount" class="com.personalManage.web.UserManageAction" method="closeAccount">
+			<result type="json"></result>
+		</action>
+		<!-- 启用用户账户 -->
+		<action name="openAccount" class="com.personalManage.web.UserManageAction" method="openAccount">
+			<result type="json"></result>
+		</action>
+		<!-- 查看用户详情 -->
+		<action name="userDetail" class="com.personalManage.web.UserManageAction" method="userDetail">
+			<result>/jsp/user/userdetail.jsp</result>
+		</action>
+		<!-- 用户信息初始化 -->
+		<action name="modifyUserMessInit" class="com.personalManage.web.UserManageAction" method="modifyUserMessInit">
+			<result>/jsp/user/modifyUserMess.jsp</result>
+		</action>
+		<!-- 保存用户信息修改的结果 -->
+		<action name="modifyUserMess" class="com.personalManage.web.UserManageAction" method="modifyUserMess">
+			<result type="json"></result>
+		</action>
+		<!-- 部门信息管理 -->
+		<action name="listDeparts" class="com.personalManage.web.UserManageAction" method="listDeparts">
+			<result>/jsp/user/list_department.jsp</result>
+		</action>
+		<!-- 添加部门信息 -->
+		<action name="addDepart" class="com.personalManage.web.UserManageAction" method="addDepart">
+			<result type="json"></result>
+		</action>
+		<!-- 修改部门信息 -->
+		<action name="modifyDepart" class="com.personalManage.web.UserManageAction" method="modifyDepart">
+			<result type="json"></result>
+		</action>
+		<!-- 删除部门信息 -->
+		
+		<action name="deltDepart" class="com.personalManage.web.UserManageAction" method="deltDepart">
+			<result type="json"></result>
+		</action>
+		<!-- 修改登录密码 -->
+		<action name="modifyMyPass">
+			<result >/jsp/user/modifyMyPass.jsp</result>
+		</action>
+		<!-- 保存修改的密码 -->
+		<action name="saveMyNewPass" class="com.personalManage.web.UserManageAction" method="saveMyNewPass">
+			<result type="json"></result>
+		</action>
+		<!-- 用户信息初始化 -->
+		<action name="modifyPersonalMess" class="com.personalManage.web.UserManageAction" method="modifyUserMessInit">
+			<result>/jsp/user/modifyPersonalMess.jsp</result>
+		</action>
+		
+	</package>
+</struts>
