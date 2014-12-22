@@ -323,7 +323,7 @@ public class CaseManageEbo extends EcPageHelper implements CaseManageEbi {
 				caseManageDao.saveCaseIdentity(zqCaseModel,
 						zqContractcoscusModels);
 				result = "1";
-			} catch (HibernateException e) {
+			} catch (Exception e) {
 				// TODO: handle exception
 				Log4j.errorLog(this, e);
 			}

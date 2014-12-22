@@ -43,7 +43,7 @@ import com.util.SolrJUtil;
  */
 public class CaseManageDaoImpl extends HibernateDaoSupport implements
 		CaseManageDao {
-	private static final Integer CASE_INDEX = null;
+	private static final String CASE_INDEX = "case";
 
 	/*
 	 * (non-Javadoc)
@@ -323,7 +323,7 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public void saveCaseIdentity(ZqCaseModel zqCaseModel,
 			ZqContractcoscusModel[] zqContractcoscusModels)
-			throws HibernateException {
+			throws Exception {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Transaction transaction = null;
@@ -331,7 +331,7 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 			transaction = session.beginTransaction();
 			// 案件id，保存案件信息
 			Integer caseId = (Integer) session.save(zqCaseModel);
-			addCaseToSolrIndex(caseId,zqCaseModel);
+			
 			if (zqContractcoscusModels != null) {
 				for (ZqContractcoscusModel zqContractcoscusModel : zqContractcoscusModels) {
 					zqContractcoscusModel.setCaseId(caseId);
@@ -340,7 +340,11 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 				}
 			}
 			transaction.commit();
-		} catch (HibernateException e) {
+			String lawyerName = (String) session.createQuery("select name from ZqUserModel where id=?")
+					.setInteger(0, zqCaseModel.getLawyer()).uniqueResult();
+			zqCaseModel.setLawyerName(lawyerName);
+			addCaseToSolrIndex(caseId,zqCaseModel);
+		} catch (Exception e) {
 			// TODO: handle exception
 			if (transaction != null)
 				transaction.rollback();
@@ -353,7 +357,7 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 	private void addCaseToSolrIndex(Integer caseId, ZqCaseModel zqCaseModel) {
 		if (caseId != null) {
 			SolrInputDocument document = new SolrInputDocument();
-			document.addField("id", caseId+CASE_INDEX);
+			document.addField("id", caseId+"_"+CASE_INDEX);
 			document.addField("cont_number", zqCaseModel.getNumber());
 			document.addField("cont_name", zqCaseModel.getCaseName());
 			document.addField("cont_type_name",
@@ -816,6 +820,7 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 		Session session = this.getSession();
 		Transaction transaction = null;
 		try {
+			addCaseToSolrIndex(zqCaseModel.getId(), zqCaseModel);
 			transaction = session.beginTransaction();
 			// 更新案件信息
 			session.update(zqCaseModel);
@@ -828,6 +833,10 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 					session.save(zqContractcoscusModel);
 				}
 			}
+			String lawyerName = (String) session.createQuery("select name from ZqUserModel where id=?")
+					.setInteger(0, zqCaseModel.getLawyer()).uniqueResult();
+			zqCaseModel.setLawyerName(lawyerName);
+			addCaseToSolrIndex(zqCaseModel.getId(), zqCaseModel);
 			transaction.commit();
 		} catch (HibernateException e) {
 			// TODO: handle exception

@@ -203,9 +203,10 @@ public interface CaseManageDao {
 	 * 添加案件
 	 * @param zqCaseModel
 	 * @param zqContractcoscusModels
+	 * @throws Exception 
 	 */
 	void saveCaseIdentity(ZqCaseModel zqCaseModel,
-			ZqContractcoscusModel[] zqContractcoscusModels);
+			ZqContractcoscusModel[] zqContractcoscusModels) throws Exception;
 	/**
 	 * 分页查询案件信息
 	 * @param conditionMap

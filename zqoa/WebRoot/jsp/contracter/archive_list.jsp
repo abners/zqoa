@@ -53,7 +53,7 @@
 					<div class="list-form">
 					<ec:table items="contlist" var="row"
 							retrieveRowsCallback="org.extremecomponents.table.callback.LimitCallback"
-							action="contractlist.htm" width="100%">
+							action="listArchives.htm" width="100%">
 
 							<ec:row highlightRow="true">
 

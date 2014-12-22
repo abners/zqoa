@@ -311,7 +311,7 @@ public class ContracterManageEbo extends EcPageHelper implements
 			} else {
 				result = "2";
 			}
-		} catch (HibernateException e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 			Log4j.errorLog(this, e);
 		}
@@ -482,9 +482,9 @@ public class ContracterManageEbo extends EcPageHelper implements
 			if (lawyerId != null) {
 				// 获取协助律师的个数
 				int length = lawyerId.length;
-				System.out.println(lawyerId[0]);
+//				System.out.println(lawyerId[0]);
 				zqContractcoscusModels = new ZqContractcoscusModel[length];
-				System.out.println(zqContractcoscusModels.length);
+//				System.out.println(zqContractcoscusModels.length);
 				// 放入协助律师信息
 				for (int i = 0; i < length; i++) {
 					zqContractcoscusModel = new ZqContractcoscusModel();
@@ -512,7 +512,7 @@ public class ContracterManageEbo extends EcPageHelper implements
 			try {
 				contracterManageDao.saveContract(zqContractModel,
 						zqContractcoscusModels, zqContractcharagestageModels);
-			} catch (HibernateException e) {
+			} catch (Exception e) {
 				// TODO: handle exception
 				return "0";
 			}

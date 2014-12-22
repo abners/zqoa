@@ -2,6 +2,7 @@ package com.util;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -44,6 +45,17 @@ public class SolrJUtil {
 			solrServer.commit();
 		} catch (Exception e) {
 			Log4j.errorLog(SolrJUtil.class,e);
+		}
+	}
+	
+	public static void deleteDocs(List<String> indexId) throws Exception{
+		SolrServer solrServer = getSolrInstance();
+		try {
+			solrServer.deleteById(indexId);
+			solrServer.commit();
+		} catch (Exception e) {
+			Log4j.errorLog(SolrJUtil.class,e);
+			throw e;
 		}
 	}
 }

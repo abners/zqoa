@@ -133,7 +133,7 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public void saveContract(ZqContractModel zqContractModel,
 			ZqContractcoscusModel[] zqContractcoscusModels,
-			List<ZqContractcharagestageModel> zqContractcharagestageModels) {
+			List<ZqContractcharagestageModel> zqContractcharagestageModels) throws Exception {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 
@@ -159,13 +159,12 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 			// 添加合同信息到solr索引中
 			addContractToSolr(contractId, zqContractModel);
 			transaction.commit();
-		} catch (HibernateException e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 			if (transaction != null)
 				// 回滚操作
 				transaction.rollback();
-			e.printStackTrace();
-			throw new HibernateException(e);
+			throw e;
 		} finally {
 			session.close();
 		}
@@ -307,7 +306,7 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	}
 
 	@Override
-	public void deletContById(Integer contId) throws HibernateException {
+	public void deletContById(Integer contId) throws Exception {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 		Transaction transaction = null;
@@ -326,17 +325,24 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 			// 删除合同本身信息
 			session.createQuery(deltContSql).setInteger("contId", contId)
 					.executeUpdate();
-
+			deltContInSolr(contId);
 			transaction.commit();
-
-		} catch (HibernateException e) {
+			
+		} catch (Exception e) {
 			// TODO: handle exception
 			if (transaction != null)
 				transaction.rollback();
-			throw new HibernateException(e);
+			throw e;
 		} finally {
 			session.close();
 		}
+	}
+
+	private void deltContInSolr(Integer contId) throws Exception {
+		List<String> ids = new ArrayList<String>();
+		ids.add(String.valueOf(contId));
+		SolrJUtil.deleteDocs(ids);
+		
 	}
 
 	@Override
@@ -409,7 +415,7 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 					"update ZqContractModel set archived=? where id=?")
 					.setString(0, archived).setInteger(1, contId)
 					.executeUpdate();
-
+			
 			transaction.commit();
 		} catch (HibernateException e) {
 			// TODO: handle exception

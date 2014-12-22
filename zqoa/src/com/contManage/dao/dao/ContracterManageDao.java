@@ -149,7 +149,7 @@ public interface ContracterManageDao {
 	 */
 	public void saveContract(ZqContractModel zqContractModel,
 			ZqContractcoscusModel[] zqContractcoscusModels,
-			List<ZqContractcharagestageModel> zqContractcharagestageModels);
+			List<ZqContractcharagestageModel> zqContractcharagestageModels) throws Exception;
 
 	/**
 	 * 分页查合同或档案信息
@@ -197,8 +197,9 @@ public interface ContracterManageDao {
 	/**
 	 * 删除合同及其相关信息
 	 * @param contId
+	 * @throws Exception 
 	 */
-	public void deletContById(Integer contId);
+	public void deletContById(Integer contId) throws Exception;
 
 	/**
 	 * 根据合同类型id获取合同
