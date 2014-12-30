@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -57,5 +60,20 @@ public class SolrJUtil {
 			Log4j.errorLog(SolrJUtil.class,e);
 			throw e;
 		}
+	}
+
+	public static QueryResponse fullTextSearch(String searchContent) throws SolrServerException {
+		SolrQuery solrQuery = new SolrQuery("all:"+searchContent);
+		QueryRequest qr = new QueryRequest(solrQuery); 
+		QueryResponse qrs = null;
+//		solrQuery.
+		try {
+			qrs = qr.process(getSolrInstance());
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			Log4j.errorLog(SolrJUtil.class,e);
+			throw e;
+		}
+		return qrs;
 	}
 }

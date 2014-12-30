@@ -11,6 +11,7 @@ import com.contManage.vo.ZqContractcharagestageModel;
 import com.contManage.vo.ZqContractcoscusModel;
 import com.contManage.vo.ZqContracttypeModel;
 import com.customerManage.vo.ZqCustomerModel;
+import com.executiveManage.vo.IndexModel;
 import com.login.vo.ZqUserModel;
 import com.util.PageBean;
 
@@ -195,6 +196,13 @@ public interface ContracterManageEbi {
 	public String addArchive(ZqContractModel zqContractModel,
 			Integer[] lawyerId, String[] lawyerName, Integer[] pay,
 			String[] payTime);
+
+	/**
+	 * 全文搜索案件和合同信息
+	 * @param searchContent
+	 * @return
+	 */
+	public IndexModel fullSearchCaseAndContract(String searchContent);
 
 
 	

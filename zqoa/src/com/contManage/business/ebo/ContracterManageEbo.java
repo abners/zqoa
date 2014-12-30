@@ -6,8 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.solr.client.solrj.SolrResponse;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.hibernate.HibernateException;
 import org.springframework.dao.DataAccessException;
+
+import sun.util.logging.resources.logging;
 
 import com.FileManage.vo.ZqBusFileModel;
 import com.FileManage.vo.ZqFileModel;
@@ -20,10 +24,12 @@ import com.contManage.vo.ZqContractcharagestageModel;
 import com.contManage.vo.ZqContractcoscusModel;
 import com.contManage.vo.ZqContracttypeModel;
 import com.customerManage.vo.ZqCustomerModel;
+import com.executiveManage.vo.IndexModel;
 import com.login.vo.ZqUserModel;
 import com.util.EcPageHelper;
 import com.util.Log4j;
 import com.util.PageBean;
+import com.util.SolrJUtil;
 
 /**
  * 合同信息管理业务层实现
@@ -522,6 +528,19 @@ public class ContracterManageEbo extends EcPageHelper implements
 		}
 
 		return "1";
+	}
+
+	@Override
+	public IndexModel fullSearchCaseAndContract(String searchContent) {
+		// TODO Auto-generated method stub
+		try {
+			SolrResponse response = SolrJUtil.fullTextSearch(searchContent);
+			Log4j.logMess(response.toString());
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

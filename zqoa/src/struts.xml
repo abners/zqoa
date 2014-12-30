@@ -78,10 +78,6 @@
 			<result>/jsp/main.jsp</result>
 		</action>
 		
-		<action name="fullTextSearch" class="com.contManage.web.FullTextSearchAction" >
-			<result name=""></result>
-		</action>
-		
 		<!-- 添加客户初始化界面 -->
 		<action name="addCustomer">
 			<result>/jsp/customer/addCustomer.jsp</result>
@@ -283,6 +279,9 @@
 		</action>
 		<action name="exitSystem" class="com.executiveManage.web.ExecutiveAction" method="exitSystem">
 			<result>/goToLogin1.jsp</result>
+		</action>
+		<action name="fullSearch" class="com.contManage.web.FullTextSearchAction">
+			<result>/jsp/searchMessage.jsp</result>
 		</action>
 	</package>
 	<include file="case_struts.xml" />

@@ -163,7 +163,7 @@ H1 a {
         <ul class="MM"><%--
           <li><span><a href="#">站内搜索</a></span></li>
           --%><li><span><a href="lawyerSelect.htm" target="main">律师承办查看</a></span></li>
-         
+         <li><a href="searchMessage.jsp" target="main">站内搜索</a></li>
           <s:if test="%{(#session.user.powers).indexOf('A1')>=0}">
           <li><a href="addContractInit.htm" target="main">添加合同</a></li>
           </s:if>
