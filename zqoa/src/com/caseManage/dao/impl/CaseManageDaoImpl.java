@@ -1,6 +1,7 @@
 package com.caseManage.dao.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ import com.util.SolrJUtil;
  */
 public class CaseManageDaoImpl extends HibernateDaoSupport implements
 		CaseManageDao {
-	private static final String CASE_INDEX = "case";
+	private static final String CASE_INDEX = "_case";
 
 	/*
 	 * (non-Javadoc)
@@ -676,8 +677,23 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 	public void updateCaseStatusById(Integer caseId, Integer status)
 			throws HibernateException {
 		// TODO Auto-generated method stub
+		updateCaseStatusIndex(caseId,status);
 		updateObject("update ZqCaseModel set status=? where id=? ",
 				new Object[] { status, caseId });
+		
+		
+	}
+
+	private void updateCaseStatusIndex(Integer caseId, Integer status) {
+		// TODO Auto-generated method stub
+		SolrInputDocument solrInputDocument = new SolrInputDocument();
+		solrInputDocument.addField("id", status+CASE_INDEX);
+		Map<String, Object> value = new HashMap<String, Object>();
+		value.put("set", status);
+		solrInputDocument.addField("status", value);
+		List<SolrInputDocument> solrInputDocuments = new ArrayList<SolrInputDocument>();
+		solrInputDocument.addChildDocument(solrInputDocument);
+		SolrJUtil.add(solrInputDocuments);
 	}
 
 	/**
@@ -777,6 +793,7 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 			// 删除案件信息
 			session.createQuery("delete from ZqCaseModel where id=:caseId")
 					.setInteger("caseId", caseId).executeUpdate();
+			deletCaseIndexInSolr(caseId);
 			transaction.commit();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -786,6 +803,12 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 		}finally{
 			session.close();
 		}
+	}
+
+	private void deletCaseIndexInSolr(Integer caseId) throws Exception {
+		List<String> indexId = new ArrayList<String>();
+		indexId.add(String.valueOf(caseId)+CASE_INDEX);
+		SolrJUtil.deleteDocs(indexId);
 	}
 
 	@Override

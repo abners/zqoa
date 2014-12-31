@@ -3,13 +3,19 @@ package com.contManage.web;
 
 import com.contManage.business.ebi.ContracterManageEbi;
 import com.executiveManage.vo.IndexModel;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class FullTextSearchAction extends ActionSupport {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3796337323520431512L;
 	private String searchContent;
 	private ContracterManageEbi contracterManageEbi;
 	public String execute(){
-		IndexModel indexModel = contracterManageEbi.fullSearchCaseAndContract(searchContent);
+		IndexModel indexModels = contracterManageEbi.fullSearchCaseAndContract(searchContent);
+		ActionContext.getContext().getValueStack().set("index", indexModels);
 		return SUCCESS;
 	}
 	public String getSearchContent() {

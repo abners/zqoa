@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -63,7 +64,7 @@ public class SolrJUtil {
 	}
 
 	public static QueryResponse fullTextSearch(String searchContent) throws SolrServerException {
-		SolrQuery solrQuery = new SolrQuery("all:"+searchContent);
+		SolrQuery solrQuery = new SolrQuery("all:\""+searchContent+"\"");
 		QueryRequest qr = new QueryRequest(solrQuery); 
 		QueryResponse qrs = null;
 //		solrQuery.

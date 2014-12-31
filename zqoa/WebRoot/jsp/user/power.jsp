@@ -44,6 +44,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<fieldset class="powerMgr">
 							<legend>合同管理权限</legend>
 							<ul id="contMgr">
+							    <li>
+									<input type="checkbox" name="zqGroupModel.power" value="A7" <s:if test="groupPowers.id==1">disabled</s:if> <s:if test="%{groupPowers.power.indexOf('A7')>=0}">checked="checked"</s:if>/>
+									站内搜索
+								</li>
 								<li>
 									<input type="checkbox" name="zqGroupModel.power" value="A1" <s:if test="groupPowers.id==1">disabled</s:if> <s:if test="%{groupPowers.power.indexOf('A1')>=0}">checked="checked"</s:if>/>
 									添加合同
@@ -69,7 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									收费登记
 								</li>
 								<li>
-									<input class="select-all" type="checkbox" name="contMgr" <s:if test="groupPowers.id==1">disabled</s:if> <s:if test="%{groupPowers.power.indexOf('A1,A2,A3,A4,A5,A6')>=0}">checked="checked"</s:if>/>
+									<input class="select-all" type="checkbox" name="contMgr" <s:if test="groupPowers.id==1">disabled</s:if> <s:if test="%{groupPowers.power.indexOf('A1,A2,A3,A4,A5,A6,A7')>=0}">checked="checked"</s:if>/>
 									<span>全选</span>
 								</li>
 							</ul>

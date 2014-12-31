@@ -41,6 +41,9 @@ import com.util.SolrJUtil;
  */
 public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 		ContracterManageDao {
+	/**
+	 * 合同索引后缀
+	 */
 	private static final String CONTRACT_INDEX = "_cont";
 
 	/*
@@ -133,7 +136,8 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 	@Override
 	public void saveContract(ZqContractModel zqContractModel,
 			ZqContractcoscusModel[] zqContractcoscusModels,
-			List<ZqContractcharagestageModel> zqContractcharagestageModels) throws Exception {
+			List<ZqContractcharagestageModel> zqContractcharagestageModels)
+			throws Exception {
 		// TODO Auto-generated method stub
 		Session session = this.getSession();
 
@@ -175,15 +179,28 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 			ZqContractModel zqContractModel) {
 		if (contractId != null) {
 			SolrInputDocument document = new SolrInputDocument();
-			document.addField("id", contractId+CONTRACT_INDEX);
-			document.addField("cont_number", zqContractModel.getNumber());
-			document.addField("cont_name", zqContractModel.getContName());
-			document.addField("cont_type_name",
-					zqContractModel.getContTypeName());
+			document.addField("id", contractId + CONTRACT_INDEX);
+			if (zqContractModel.getNumber() != null) {
+				document.addField("cont_number", zqContractModel.getNumber());
+			}
+			if (zqContractModel.getContName() != null) {
+				document.addField("cont_name", zqContractModel.getContName());
+			}
+			if (zqContractModel.getContTypeName() != null) {
+				document.addField("cont_type_name",
+						zqContractModel.getContTypeName());
+			}
 			document.addField("index_type", "1");
-			document.addField("status", zqContractModel.getArchived());
-			document.addField("lawyer_name", zqContractModel.getLawyerName());
-			document.addField("cust_name", zqContractModel.getCustName());
+			if (zqContractModel.getArchived() != null) {
+				document.addField("status", zqContractModel.getArchived());
+			}
+			if (zqContractModel.getLawyerName() != null) {
+				document.addField("lawyer_name",
+						zqContractModel.getLawyerName());
+			}
+			if (zqContractModel.getCustName() != null) {
+				document.addField("cust_name", zqContractModel.getCustName());
+			}
 			List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
 			documents.add(document);
 			SolrJUtil.add(documents);
@@ -327,7 +344,7 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 					.executeUpdate();
 			deltContInSolr(contId);
 			transaction.commit();
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			if (transaction != null)
@@ -340,9 +357,9 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 
 	private void deltContInSolr(Integer contId) throws Exception {
 		List<String> ids = new ArrayList<String>();
-		ids.add(String.valueOf(contId));
+		ids.add(String.valueOf(contId)+CONTRACT_INDEX);
 		SolrJUtil.deleteDocs(ids);
-		
+
 	}
 
 	@Override
@@ -415,14 +432,31 @@ public class ContracterManageDaoImpl extends HibernateDaoSupport implements
 					"update ZqContractModel set archived=? where id=?")
 					.setString(0, archived).setInteger(1, contId)
 					.executeUpdate();
-			
+
 			transaction.commit();
+			ZqContractModel zqContractModel = new ZqContractModel();
+			zqContractModel.setArchived(archived);
+			updateContractStateToSolr(contId, zqContractModel);
 		} catch (HibernateException e) {
 			// TODO: handle exception
 			if (transaction != null)
 				transaction.rollback();
 			throw e;
 		}
+	}
+
+	private void updateContractStateToSolr(Integer contId,
+			ZqContractModel zqContractModel) {
+		SolrInputDocument inputDocument = new SolrInputDocument();
+		inputDocument.addField("id",contId.toString()+CONTRACT_INDEX);
+		if(zqContractModel.getArchived()!=null){
+			Map<String, Object> value = new HashMap<String, Object>();
+			value.put("set", zqContractModel.getArchived());
+			inputDocument.setField("status", value);
+		}
+		List<SolrInputDocument> solrInputDocuments = new ArrayList<SolrInputDocument>();
+		solrInputDocuments.add(inputDocument);
+		SolrJUtil.add(solrInputDocuments);
 	}
 
 	@Override

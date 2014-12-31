@@ -6,8 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrResponse;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.hibernate.HibernateException;
 import org.springframework.dao.DataAccessException;
 
@@ -532,15 +537,63 @@ public class ContracterManageEbo extends EcPageHelper implements
 
 	@Override
 	public IndexModel fullSearchCaseAndContract(String searchContent) {
-		// TODO Auto-generated method stub
+		IndexModel indexModels = new IndexModel();
+		List<ZqCaseModel> zqNoOverCaseModels = new ArrayList<ZqCaseModel>();
+		List<ZqCaseModel> zqOverCaseModels = new ArrayList<ZqCaseModel>();
+		List<ZqContractModel> zqNoOverContractModels = new ArrayList<ZqContractModel>();
+		List<ZqContractModel> zqOverContractModels = new ArrayList<ZqContractModel>();
 		try {
-			SolrResponse response = SolrJUtil.fullTextSearch(searchContent);
-			Log4j.logMess(response.toString());
+			QueryResponse response = SolrJUtil.fullTextSearch(searchContent);
+			
+			SolrDocumentList documentList = response.getResults();
+			for(SolrDocument document:documentList){
+				String status = (String) document.getFieldValue("status");
+				//结果类型 1合同，2案件
+				String modelType = (String) document.getFieldValue("index_type");
+				String name = (String) document.getFieldValue("cont_name");
+				String cust_name = (String)document.getFieldValue("cust_name");
+				String number = (String)document.getFieldValue("cont_number");
+				String lawyerName = (String)document.getFieldValue("lawyer_name");
+				int id = Integer.valueOf(((String)document.getFieldValue("id")).split("_")[0]);
+				if(StringUtils.equals("1", modelType)){
+					ZqContractModel zqContractModel = new ZqContractModel();
+					zqContractModel.setContName(name);
+					zqContractModel.setNumber(number);
+					zqContractModel.setLawyerName(lawyerName);
+					zqContractModel.setId(id);
+					zqContractModel.setCustName(cust_name);
+					if(StringUtils.equals("0", status)){
+						zqNoOverContractModels.add(zqContractModel);
+					}else {
+						zqOverContractModels.add(zqContractModel); 
+					}
+				}else {
+					String typeName = (String)document.getFieldValue("cont_type_name");
+					ZqCaseModel zqCaseModel = new ZqCaseModel();
+					zqCaseModel.setCaseName(name);
+					zqCaseModel.setLawyerName(lawyerName);
+					zqCaseModel.setNumber(number);
+					zqCaseModel.setTypeName(typeName);
+					zqCaseModel.setId(id);
+					zqCaseModel.setCustName(cust_name);
+					if(StringUtils.equals("0", status)){
+						zqNoOverCaseModels.add(zqCaseModel);
+					}else {
+						zqOverCaseModels.add(zqCaseModel);
+					}
+				}
+				
+			}
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log4j.errorLog("搜索出错:{}", e);
+			return null;
 		}
-		return null;
+		indexModels.setZqNoOverCaseModels(zqNoOverCaseModels);
+		indexModels.setZqNoOverContractModels(zqNoOverContractModels);
+		indexModels.setZqOverCaseModels(zqOverCaseModels);
+		indexModels.setZqOverContractModels(zqOverContractModels);
+		return indexModels;
 	}
 
 }

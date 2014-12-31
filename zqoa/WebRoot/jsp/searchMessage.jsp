@@ -47,7 +47,7 @@
 								<tr>
 									<th>请输入内容：</th>
 									<td><input name="searchContent" id="searchContent"
-										class="" />&nbsp;&nbsp;<input id="searchNeirong"
+										class="" value="<s:property value="searchContent" />"/>&nbsp;&nbsp;<input id="searchNeirong"
 										class="btn-submit" type="button" value="搜索" /></td>
 								</tr>
 							</table>
@@ -66,7 +66,7 @@
 				<div class="content work-ct">
 					<s:if test="index.zqNoOverCaseModels.size==0">
 						<h2 style="padding: 15px 30px">
-							<span class="info" style="padding-left: 20px">无承办案件记录</span>
+							<span class="info" style="padding-left: 20px">没有匹配的结果哎^^</span>
 						</h2>
 					</s:if>
 					<s:else>
@@ -84,7 +84,7 @@
 										title=""><s:property value="number" /></a></td>
 									<td><s:property value="caseName" /></td>
 									<td><s:property value="typeName" /></td>
-									<td><s:property value="userName" /></td>
+									<td><s:property value="lawyerName" /></td>
 
 								</tr>
 							</s:iterator>
@@ -101,7 +101,7 @@
 				<div class="content work-ct">
 					<s:if test="index.zqOverCaseModels.size==0">
 						<h2 style="padding: 15px 30px">
-							<span class="info" style="padding-left: 20px">无承办案件记录</span>
+							<span class="info" style="padding-left: 20px">没有匹配的结果哎^^</span>
 						</h2>
 					</s:if>
 					<s:else>
@@ -119,7 +119,7 @@
 										title=""><s:property value="number" /></a></td>
 									<td><s:property value="caseName" /></td>
 									<td><s:property value="typeName" /></td>
-									<td><s:property value="userName" /></td>
+									<td><s:property value="lawyerName" /></td>
 
 								</tr>
 							</s:iterator>
@@ -137,7 +137,7 @@
 				<div class="content work-ct">
 					<s:if test="index.zqNoOverContractModels.size==0">
 						<h2 style="padding: 15px 30px">
-							<span class="info" style="padding-left: 20px">无承办合同记录</span>
+							<span class="info" style="padding-left: 20px">没有匹配的结果哎^^</span>
 						</h2>
 					</s:if>
 					<s:else>
@@ -174,7 +174,7 @@
 				<div class="content work-ct">
 					<s:if test="index.zqOverContractModels.size==0">
 						<h2 style="padding: 15px 30px">
-							<span class="info" style="padding-left: 20px">无承办合同记录</span>
+							<span class="info" style="padding-left: 20px">没有匹配的结果哎^^</span>
 						</h2>
 					</s:if>
 					<s:else>
@@ -215,7 +215,7 @@
 	$(document).ready(function() {
 		$("#searchNeirong").click(function() {
 			if ($.trim($("#searchContent").val())==''){
-				
+				$("#searchContent").focus();
 			}else{
 				$("#searcher").submit();
 			}
