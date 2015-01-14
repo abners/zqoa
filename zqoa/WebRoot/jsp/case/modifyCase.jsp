@@ -317,6 +317,7 @@ $(document).ready(function(){
 	});
 	$("#Case-type").val('<s:property value="casemess.typeId"/>');
 	$("#litigant").val('<s:property value="casemess.litigant"/>');
+	$("#lawyer").val('<s:property value="casemess.lawyer"/>');
 });
 </script>
 
