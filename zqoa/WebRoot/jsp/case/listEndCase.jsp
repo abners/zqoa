@@ -52,7 +52,7 @@
 					<div class="list-form">
 					<ec:table items="caselist" var="row"
 							retrieveRowsCallback="org.extremecomponents.table.callback.LimitCallback"
-							action="listCase.htm" width="100%">
+							action="listEndCase.htm" width="100%">
 
 							<ec:row highlightRow="true">
 
