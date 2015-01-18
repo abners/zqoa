@@ -24,8 +24,6 @@ import com.customerManage.vo.ZqCustomerModel;
 import com.login.vo.ZqUserModel;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import com.sun.org.apache.regexp.internal.REUtil;
 import com.util.ExtremeTablePage;
 import com.util.MethodUtils;
 import com.util.PageBean;

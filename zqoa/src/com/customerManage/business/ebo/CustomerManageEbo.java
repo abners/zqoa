@@ -3,17 +3,12 @@ package com.customerManage.business.ebo;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.extremecomponents.table.limit.Limit;
 import org.springframework.dao.DataAccessException;
 
 import com.customerManage.business.ebi.CustomerManageEbi;
 import com.customerManage.dao.dao.CustomerManageDao;
 import com.customerManage.vo.ZqCustomerModel;
-import com.sun.org.apache.regexp.internal.recompile;
 import com.util.EcPageHelper;
-import com.util.ExtremeTablePage;
 import com.util.Log4j;
 import com.util.PageBean;
 

@@ -1,22 +1,17 @@
 package com.contManage.business.ebo;
 
-import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrResponse;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.hibernate.HibernateException;
 import org.springframework.dao.DataAccessException;
-
-import sun.util.logging.resources.logging;
 
 import com.FileManage.vo.ZqBusFileModel;
 import com.FileManage.vo.ZqFileModel;

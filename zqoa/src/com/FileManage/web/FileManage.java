@@ -1,31 +1,22 @@
 package com.FileManage.web;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.json.annotations.JSON;
 
-import sun.net.www.protocol.ftp.FtpURLConnection;
-
 import com.FileManage.business.ebi.FileManageEbi;
 import com.FileManage.vo.ZqFileModel;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.util.FtpUtil;
-import com.util.JSONUtil;
 import com.util.Log4j;
 import com.util.MethodUtils;
 
