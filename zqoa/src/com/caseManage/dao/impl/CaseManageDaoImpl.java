@@ -357,7 +357,7 @@ public class CaseManageDaoImpl extends HibernateDaoSupport implements
 	private void addCaseToSolrIndex(Integer caseId, ZqCaseModel zqCaseModel) {
 		if (caseId != null) {
 			SolrInputDocument document = new SolrInputDocument();
-			document.addField("id", caseId+"_"+CASE_INDEX);
+			document.addField("id", caseId+CASE_INDEX);
 			document.addField("cont_number", zqCaseModel.getNumber());
 			document.addField("cont_name", zqCaseModel.getCaseName());
 			document.addField("cont_type_name",
