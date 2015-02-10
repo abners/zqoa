@@ -326,7 +326,7 @@
 $(document).ready(function(){
 	//选择协办律师
 	$("#btn-sub-lawyer").click(function(){
-		openwindow("getCo_counsel.htm","",700,400);
+		openwindow("getCo_counsel.htm","","width=700,height=400,scrollbars=yes");
 		
 	});
 	//取消选择
